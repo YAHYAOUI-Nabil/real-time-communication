@@ -16,6 +16,10 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  isValid: {
+    type: Boolean,
+    default: false,
+  },
   authCode: {
     type: String,
   },
