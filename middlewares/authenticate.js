@@ -6,7 +6,7 @@ var jwt = require("jsonwebtoken");
 var User = require("../models/userModel");
 var opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.SECRET_OR_KEY;
+opts.secretOrKey = process.env.ACCESS_TOKEN_SECRET_KEY;
 require("dotenv").config();
 
 passport.use(new LocalStrategy(User.authenticate()));
@@ -32,7 +32,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 exports.getToken = (user) => {
-  return jwt.sign(user, process.env.SECRET_OR_KEY, {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET_KEY, {
     expiresIn: 3600 * 24 * 7,
   });
 };

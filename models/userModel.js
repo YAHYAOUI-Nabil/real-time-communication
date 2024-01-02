@@ -23,6 +23,7 @@ const userSchema = new Schema({
   authCode: {
     type: String,
   },
+  refreshToken: [String],
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: "email" });

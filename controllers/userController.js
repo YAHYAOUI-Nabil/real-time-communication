@@ -1,5 +1,7 @@
 const User = require("../models/userModel");
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
+
 const authenticate = require("../middlewares/authenticate");
 const sendConfirmationEmail = require("../middlewares/sendConfirmationEmail");
 const generateActivationCode = require("../middlewares/generateActivationCode");
@@ -91,7 +93,9 @@ exports.editUser = (req, res, next) => {
     });
 };
 
-exports.validateUser = (req, res, next) => {
+exports.validateUser = async (req, res, next) => {
+  const cookies = req.cookies;
+
   if (req.body.authCode != req.user.authCode) {
     return res.status(404).json({ error: "validation code not correct!" });
   }
@@ -101,19 +105,74 @@ exports.validateUser = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, updatedUser, { new: true })
     .then((user) => {
       if (user) {
-        passport.authenticate("local")(req, res, () => {
-          var token = authenticate.getToken({ _id: user._id.valueOf() });
+        passport.authenticate("local")(req, res, async () => {
+          const accessToken = jwt.sign(
+            {
+              userInfo: {
+                username: user.email,
+                id: user._id,
+              },
+            },
+            process.env.ACCESS_TOKEN_SECRET_KEY,
+            { expiresIn: "10sec" }
+          );
+          const newRefreshToken = jwt.sign(
+            {
+              username: user.email,
+              id: user._id,
+            },
+            process.env.REFRESH_TOKEN_SECRET_KEY,
+            { expiresIn: "15sec" }
+          );
+
+          // Changed to let keyword
+          let newRefreshTokenArray = !cookies?.jwt
+            ? user.refreshToken
+            : user.refreshToken.filter((rt) => rt !== cookies.jwt);
+
+          if (cookies?.jwt) {
+            /* 
+            Scenario added here: 
+                1) User logs in but never uses RT and does not logout 
+                2) RT is stolen
+                3) If 1 & 2, reuse detection is needed to clear all RTs when user logs in
+            */
+            const refreshToken = cookies.jwt;
+            const foundToken = await User.findOne({ refreshToken }).exec();
+
+            // Detected refresh token reuse!
+            if (!foundToken) {
+              console.log("attempted refresh token reuse at login!");
+              // clear out ALL previous refresh tokens
+              newRefreshTokenArray = [];
+            }
+
+            res.clearCookie("jwt", {
+              httpOnly: true,
+              sameSite: "None",
+              secure: true,
+            });
+          }
+
+          // Saving refreshToken with current user
+          user.refreshToken = [...newRefreshTokenArray, newRefreshToken];
+          const result = await user.save();
+          console.log(result);
+
+          // Creates Secure Cookie with refresh token
+          res.cookie("jwt", newRefreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+            maxAge: 24 * 60 * 60 * 1000,
+          });
+
+          // Send authorization roles and access token to user
           res.statusCode = 200;
           res.setHeader("Content-Type", "application/json");
           res.json({
-            success: true,
-            token: token,
-            identifier: user.identifier,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            phone: user.phone,
-            status: "You are Successfully validate your account!",
+            accessToken,
+            fullname: user.fullname,
           });
         });
       } else {

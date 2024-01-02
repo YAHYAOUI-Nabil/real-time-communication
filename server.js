@@ -10,6 +10,7 @@ const corsOptions = require("./config/corsOptions");
 const path = require("path");
 const session = require("express-session");
 const DBconne = require("./config/DBconn");
+const userRoutes = require("./routes/userRoutes");
 
 DBconne();
 
@@ -17,7 +18,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-// app.use("/user", userRoutes);
+app.use("/user", userRoutes);
 // app.use("/auth", authRoutes);
 
 if (process.env.NODE_ENV === "production") {
