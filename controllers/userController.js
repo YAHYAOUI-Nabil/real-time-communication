@@ -38,22 +38,6 @@ exports.register = (req, res, next) => {
   });
 };
 
-exports.signin = (req, res, next) => {
-  var token = authenticate.getToken({ _id: req.user._id.valueOf() });
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json");
-  res.json({
-    success: true,
-    token: token,
-    identifier: req.user.identifier,
-    email: req.user.email,
-    firstName: req.user.firstName,
-    lastName: req.user.lastName,
-    phone: req.user.phone,
-    status: "You are successfully logged in!",
-  });
-};
-
 exports.editUser = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   const updatedUser = {
