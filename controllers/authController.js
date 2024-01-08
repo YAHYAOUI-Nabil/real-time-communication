@@ -15,7 +15,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET_KEY,
-    { expiresIn: "10sec" }
+    { expiresIn: "5sec" }
   );
   const newRefreshToken = jwt.sign(
     {
@@ -23,14 +23,13 @@ exports.login = asyncHandler(async (req, res, next) => {
       id: req.user._id,
     },
     process.env.REFRESH_TOKEN_SECRET_KEY,
-    { expiresIn: "15sec" }
+    { expiresIn: "10sec" }
   );
 
   // Changed to let keyword
   let newRefreshTokenArray = !cookies?.jwt
     ? req.user.refreshToken
     : req.user.refreshToken.filter((rt) => rt !== cookies.jwt);
-
   if (cookies?.jwt) {
     /* 
             Scenario added here: 
@@ -49,31 +48,29 @@ exports.login = asyncHandler(async (req, res, next) => {
     }
 
     res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
-
-    // Saving refreshToken with current user
-    req.user.refreshToken = [...newRefreshTokenArray, newRefreshToken];
-    const result = await req.user.save();
-    console.log(result);
-
-    // Creates Secure Cookie with refresh token
-    res.cookie("jwt", newRefreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    // Send authorization roles and access token to user
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    res.json({
-      accessToken,
-      fullname: req.user.fullname,
-    });
   }
+  // Saving refreshToken with current user
+  req.user.refreshToken = [...newRefreshTokenArray, newRefreshToken];
+  const result = await req.user.save();
+
+  // Creates Secure Cookie with refresh token
+  res.cookie("jwt", newRefreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+
+  // Send authorization roles and access token to user
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "application/json");
+  res.json({
+    accessToken,
+    fullname: req.user.fullname,
+  });
 });
 
-exports.refresh = async (req, res) => {
+exports.refresh = asyncHandler(async (req, res) => {
   const cookies = req.cookies;
   if (!cookies?.jwt) return res.sendStatus(401);
   const refreshToken = cookies.jwt;
@@ -103,7 +100,6 @@ exports.refresh = async (req, res) => {
   const newRefreshTokenArray = foundUser.refreshToken.filter(
     (rt) => rt !== refreshToken
   );
-
   // evaluate jwt
   jwt.verify(
     refreshToken,
@@ -116,8 +112,9 @@ exports.refresh = async (req, res) => {
         console.log(result);
         return res.sendStatus(403);
       }
-      if (err || foundUser.username !== decoded.username)
+      if (err || foundUser.email !== decoded.username) {
         return res.sendStatus(403);
+      }
 
       // Refresh token was still valid
       const accessToken = jwt.sign(
@@ -128,7 +125,7 @@ exports.refresh = async (req, res) => {
           },
         },
         process.env.ACCESS_TOKEN_SECRET_KEY,
-        { expiresIn: "10min" }
+        { expiresIn: "5sec" }
       );
 
       const newRefreshToken = jwt.sign(
@@ -137,7 +134,7 @@ exports.refresh = async (req, res) => {
           id: foundUser._id,
         },
         process.env.REFRESH_TOKEN_SECRET_KEY,
-        { expiresIn: "1d" }
+        { expiresIn: "10sec" }
       );
       // Saving refreshToken with current user
       foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];
@@ -154,11 +151,10 @@ exports.refresh = async (req, res) => {
       res.json({ accessToken });
     }
   );
-};
+});
 
-exports.logout = async (req, res) => {
+exports.logout = asyncHandler(async (req, res) => {
   // On client, also delete the accessToken
-
   const cookies = req.cookies;
   if (!cookies?.jwt) return res.sendStatus(204); //No content
   const refreshToken = cookies.jwt;
@@ -167,15 +163,15 @@ exports.logout = async (req, res) => {
   const foundUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) {
     res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
-    return res.sendStatus(204);
+    res.sendStatus(204);
   }
-
   // Delete refreshToken in db
   foundUser.refreshToken = foundUser.refreshToken.filter(
     (rt) => rt !== refreshToken
   );
+
   const result = await foundUser.save();
 
   res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
-  res.sendStatus(204);
-};
+  res.json({ message: "user logged out successfully" });
+});

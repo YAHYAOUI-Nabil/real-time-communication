@@ -13,7 +13,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 
 passport.use(
   new JwtStrategy(opts, (jwt_payload, done) => {
-    User.findOne({ _id: jwt_payload._id })
+    User.findOne({ _id: jwt_payload.userInfo.id })
       .then((user) => {
         if (user) {
           return done(null, user);

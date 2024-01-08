@@ -12,6 +12,20 @@ router.post(
   checkUserValidity.checkUserIsNotValid,
   userController.validateUser
 );
+router.get(
+  "/",
+  // rateLimiter,
+  // checkUserValidity.checkUserIsValid,
+  // authenticate.verifyUser,
+  userController.getUsers
+);
+router.put(
+  "/edit-account",
+  rateLimiter,
+  checkUserValidity.checkUserIsValid,
+  authenticate.verifyUser,
+  userController.editUser
+);
 router.delete(
   "/delete-account",
   rateLimiter,

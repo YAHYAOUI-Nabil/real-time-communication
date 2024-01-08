@@ -1,12 +1,13 @@
 const User = require("../models/userModel");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const asyncHandler = require("express-async-handler");
 
 const authenticate = require("../middlewares/authenticate");
 const sendConfirmationEmail = require("../middlewares/sendConfirmationEmail");
 const generateActivationCode = require("../middlewares/generateActivationCode");
 
-exports.register = (req, res, next) => {
+exports.register = asyncHandler(async (req, res, next) => {
   const activationCode = generateActivationCode();
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -36,18 +37,39 @@ exports.register = (req, res, next) => {
       });
     }
   });
-};
+});
 
-exports.editUser = (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
+exports.getUsers = asyncHandler(async (req, res, next) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+  User.find(keyword)
+    .then((users) => {
+      if (users) {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(users);
+      } else {
+        res.statusCode = 404;
+        res.setHeader("Content-Type", "application/json");
+        res.json({ message: "no users to display" });
+      }
+    })
+    .catch((err) => {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "application/json");
+      res.json(err);
+    });
+});
+
+exports.editUser = asyncHandler(async (req, res, next) => {
   const updatedUser = {
-    identifier: req.body.identifier,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    phone: req.body.phone,
-    isFan: req.body.isFan,
-    isAdmin: req.body.isAdmin,
-    isSuperAdmin: req.body.isSuperAdmin,
+    fullname: req.body.fullname,
   };
   User.findByIdAndUpdate(req.user._id, updatedUser, { new: true })
     .then((user) => {
@@ -56,12 +78,7 @@ exports.editUser = (req, res, next) => {
         res.setHeader("Content-Type", "application/json");
         res.json({
           success: true,
-          token: token,
-          identifier: user.identifier,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          phone: user.phone,
+          fullname: user.identifier,
           status: "User infos successfully updated",
         });
       } else {
@@ -75,9 +92,9 @@ exports.editUser = (req, res, next) => {
       res.setHeader("Content-Type", "application/json");
       res.json(err);
     });
-};
+});
 
-exports.validateUser = async (req, res, next) => {
+exports.validateUser = asyncHandler(async (req, res, next) => {
   const cookies = req.cookies;
 
   if (req.body.authCode != req.user.authCode) {
@@ -170,9 +187,9 @@ exports.validateUser = async (req, res, next) => {
       res.setHeader("Content-Type", "application/json");
       res.json(err);
     });
-};
+});
 
-exports.deleteAccount = (req, res, next) => {
+exports.deleteAccount = asyncHandler(async (req, res, next) => {
   User.findOneAndRemove({ email: req.user.email })
     .then((user) => {
       if (user) {
@@ -190,4 +207,4 @@ exports.deleteAccount = (req, res, next) => {
       res.setHeader("Content-Type", "application/json");
       res.json(err);
     });
-};
+});
