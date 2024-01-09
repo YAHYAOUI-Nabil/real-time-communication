@@ -13,6 +13,8 @@ const session = require("express-session");
 const DBconne = require("./config/DBconn");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
+const messageRoutes = require("./routes/messageRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 DBconne();
 
@@ -33,6 +35,8 @@ app.use(passport.session());
 
 app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
+app.use("/message", messageRoutes);
+app.use("/chat", chatRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("./frontend/build"));

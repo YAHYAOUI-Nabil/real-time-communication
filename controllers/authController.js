@@ -4,7 +4,6 @@ const User = require("../models/userModel");
 
 exports.login = asyncHandler(async (req, res, next) => {
   const cookies = req.cookies;
-  console.log(`cookie available at login: ${JSON.stringify(cookies)}`);
 
   // create JWTs
   const accessToken = jwt.sign(
@@ -15,7 +14,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET_KEY,
-    { expiresIn: "5sec" }
+    { expiresIn: "5d" }
   );
   const newRefreshToken = jwt.sign(
     {
