@@ -1,7 +1,8 @@
 const User = require("../models/userModel");
 
 exports.checkUserIsNotValid = (req, res, next) => {
-  User.findOne({ email: req.user.email })
+  const email = req.body.username;
+  User.findOne({ email })
     .then((user) => {
       if (user.isValid) {
         return res.status(404).json({ message: "user is already valid!" });
@@ -15,7 +16,8 @@ exports.checkUserIsNotValid = (req, res, next) => {
 };
 
 exports.checkUserIsValid = (req, res, next) => {
-  User.findOne({ email: req.user.email })
+  const email = req.body.username;
+  User.findOne({ email })
     .then((user) => {
       if (!user.isValid) {
         return res.status(404).json({ message: "user is not valid!" });
