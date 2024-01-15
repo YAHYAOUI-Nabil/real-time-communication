@@ -30,10 +30,7 @@ exports.register = asyncHandler(async (req, res, next) => {
       res.statusCode = 201;
       res.setHeader("Content-Type", "application/json");
       res.json({
-        isValid: user.isValid,
         registration: "pending",
-        status:
-          "You are Successfully registered and still waiting to validate your account!",
       });
     }
   });

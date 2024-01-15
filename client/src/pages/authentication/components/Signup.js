@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../../api/axios";
 import useAuth from "../../../hooks/useAuth";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const SIGNUP_URL = "/user";
 
 const Signup = () => {
   const { auth, setAuth } = useAuth();
   const [errMsg, setErrMsg] = useState("");
   const [validateUserData, setValidateUserData] = useState();
-  const [isRegistered, setIsRegistered] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -30,9 +29,10 @@ const Signup = () => {
           username: data.username,
           password: data.password,
         });
-        const accessToken = response?.data?.accessToken;
-        const roles = response?.data?.roles;
-        setAuth({ roles, accessToken });
+        setAuth({
+          ...auth,
+          isRegistered: true,
+        });
       } catch (err) {
         if (!err?.response) {
           setErrMsg("No Server Response");
@@ -43,7 +43,6 @@ const Signup = () => {
         } else {
           setErrMsg("Login Failed");
         }
-        // errRef.current.focus();
       }
     } else {
       setError("password", {
@@ -58,16 +57,15 @@ const Signup = () => {
   };
 
   useEffect(() => {
-    console.log("first");
     if (validateUserData) {
       navigate("/validate-account", { state: validateUserData });
     }
-  }, [auth]);
+  }, [auth.isRegistered]);
 
   return (
     <div>
       <form className="flex flex-col gap-2" onSubmit={handleSubmit(submit)}>
-        <label htmlFor="identifier">Name *</label>
+        <label htmlFor="fullname">Name *</label>
         <input
           className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
             errors.fullname ? "border-red-300" : "border-green-100"
@@ -109,7 +107,7 @@ const Signup = () => {
             },
           })}
         />
-        <label htmlFor="password">Confirm Password *</label>
+        <label htmlFor="confirmPassword">Confirm Password *</label>
         <input
           className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
             errors.confirmPassword ? "border-red-300" : "border-green-100"

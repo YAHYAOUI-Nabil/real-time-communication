@@ -5,9 +5,8 @@ import useAuth from "../../../hooks/useAuth";
 const SIGNIN_URL = "/auth/login";
 
 const Singin = () => {
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const [errMsg, setErrMsg] = useState("");
-  const [validateUserData, setValidateUserData] = useState();
   const {
     register,
     handleSubmit,
@@ -20,11 +19,14 @@ const Singin = () => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response));
-      const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
-      setAuth({ roles, accessToken });
+      setAuth({
+        ...auth,
+        isAuth: true,
+        isValid: true,
+        isRegistered: true,
+        accessToken: response.data.accessToken,
+        fullname: response.data.fullname,
+      });
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -35,7 +37,6 @@ const Singin = () => {
       } else {
         setErrMsg("Login Failed");
       }
-      // errRef.current.focus();
     }
   };
   return (
