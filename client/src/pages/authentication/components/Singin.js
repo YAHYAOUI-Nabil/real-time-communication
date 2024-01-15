@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "../../../api/axios";
+import useAuth from "../../../hooks/useAuth";
+const SIGNIN_URL = "/auth/login";
 
 const Singin = () => {
+  const { setAuth } = useAuth();
+  const [errMsg, setErrMsg] = useState("");
   const [validateUserData, setValidateUserData] = useState();
   const {
     register,
@@ -9,19 +14,38 @@ const Singin = () => {
     formState: { errors },
   } = useForm();
 
-  const submit = (data) => {
-    setValidateUserData({
-      email: data.username,
-      password: data.password,
-    });
-    console.log(data);
+  const submit = async (data) => {
+    try {
+      const response = await axios.post(SIGNIN_URL, JSON.stringify(data), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      console.log(JSON.stringify(response?.data));
+      //console.log(JSON.stringify(response));
+      const accessToken = response?.data?.accessToken;
+      const roles = response?.data?.roles;
+      setAuth({ roles, accessToken });
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Missing Username or Password");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+      // errRef.current.focus();
+    }
   };
   return (
     <div>
       <form className="flex flex-col gap-2" onSubmit={handleSubmit(submit)}>
         <label htmlFor="username">Email *</label>
         <input
-          className="focus:outline-none h-9 p-2 rounded-md border-2 border-green-100"
+          className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
+            errors.username ? "border-red-300" : "border-green-100"
+          }`}
           id="username"
           type="email"
           placeholder="Enter your Email address"
@@ -35,7 +59,9 @@ const Singin = () => {
         />
         <label htmlFor="password">Password *</label>
         <input
-          className="focus:outline-none h-9 p-2 rounded-md border-2 border-green-100"
+          className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
+            errors.password ? "border-red-300" : "border-green-100"
+          }`}
           id="password"
           type="password"
           placeholder="Enter your Password"
