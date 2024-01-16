@@ -27,6 +27,8 @@ const Singin = () => {
         accessToken: response.data.accessToken,
         fullname: response.data.fullname,
       });
+      localStorage.setItem("name", response.data.fullname);
+      localStorage.setItem("isAuthenticated", true);
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -50,6 +52,7 @@ const Singin = () => {
           id="username"
           type="email"
           placeholder="Enter your Email address"
+          autoComplete="on"
           {...register("username", {
             required: true,
             pattern: {

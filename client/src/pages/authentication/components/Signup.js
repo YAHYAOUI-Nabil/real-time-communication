@@ -73,6 +73,7 @@ const Signup = () => {
           id="fullname"
           type="text"
           placeholder="Enter your Name"
+          autoComplete="on"
           {...register("fullname", { required: true })}
         />
         <label htmlFor="username">Email *</label>
@@ -83,6 +84,7 @@ const Signup = () => {
           id="username"
           type="email"
           placeholder="Enter your Email address"
+          autoComplete="on"
           {...register("username", {
             required: true,
             pattern: {

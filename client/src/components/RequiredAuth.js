@@ -1,10 +1,9 @@
 import { Navigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 
 const RequiredAuth = ({ Component }) => {
-  const { auth } = useAuth();
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
 
-  return auth.isAuth ? <Component /> : <Navigate to="/" />;
+  return isAuthenticated ? <Component /> : <Navigate to="/" />;
 };
 
 export default RequiredAuth;

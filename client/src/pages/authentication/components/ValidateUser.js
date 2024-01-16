@@ -39,6 +39,8 @@ const ValidateUser = () => {
         accessToken: response.data.accessToken,
         fullname: response.data.fullname,
       });
+      localStorage.setItem("name", response.data.fullname);
+      localStorage.setItem("isAuthenticated", true);
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
