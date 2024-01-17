@@ -1,9 +1,10 @@
+import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const RequiredAuth = ({ Component }) => {
-  const isAuthenticated = localStorage.getItem("isAuthenticated");
+  const { isAuth } = useSelector((state) => state.auth);
 
-  return isAuthenticated ? <Component /> : <Navigate to="/" />;
+  return isAuth ? <Component /> : <Navigate to="/" />;
 };
 
 export default RequiredAuth;

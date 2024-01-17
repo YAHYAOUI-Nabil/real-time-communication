@@ -22,7 +22,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       id: req.user._id,
     },
     process.env.REFRESH_TOKEN_SECRET_KEY,
-    { expiresIn: "10sec" }
+    { expiresIn: "10d" }
   );
 
   // Changed to let keyword
@@ -90,7 +90,6 @@ exports.refresh = asyncHandler(async (req, res) => {
         }).exec();
         hackedUser.refreshToken = [];
         const result = await hackedUser.save();
-        console.log(result);
       }
     );
     return res.sendStatus(403); //Forbidden
@@ -129,11 +128,11 @@ exports.refresh = asyncHandler(async (req, res) => {
 
       const newRefreshToken = jwt.sign(
         {
-          username: foundUser.username,
+          username: foundUser.email,
           id: foundUser._id,
         },
         process.env.REFRESH_TOKEN_SECRET_KEY,
-        { expiresIn: "10sec" }
+        { expiresIn: "10d" }
       );
       // Saving refreshToken with current user
       foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];

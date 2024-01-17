@@ -16,7 +16,7 @@ router.get(
   "/",
   // rateLimiter,
   // checkUserValidity.checkUserIsValid,
-  // authenticate.verifyUser,
+  authenticate.verifyUser,
   userController.getUsers
 );
 router.put(

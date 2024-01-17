@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import axios from "../../../api/axios";
-import useAuth from "../../../hooks/useAuth";
-const SIGNIN_URL = "/auth/login";
+import { useDispatch, useSelector } from "react-redux";
+import { signin } from "../../../api";
 
 const Singin = () => {
-  const { auth, setAuth } = useAuth();
-  const [errMsg, setErrMsg] = useState("");
+  const { loading, response } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -14,32 +13,7 @@ const Singin = () => {
   } = useForm();
 
   const submit = async (data) => {
-    try {
-      const response = await axios.post(SIGNIN_URL, JSON.stringify(data), {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
-      setAuth({
-        ...auth,
-        isAuth: true,
-        isValid: true,
-        isRegistered: true,
-        accessToken: response.data.accessToken,
-        fullname: response.data.fullname,
-      });
-      localStorage.setItem("name", response.data.fullname);
-      localStorage.setItem("isAuthenticated", true);
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 400) {
-        setErrMsg("Missing Username or Password");
-      } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorized");
-      } else {
-        setErrMsg("Login Failed");
-      }
-    }
+    dispatch(signin(data));
   };
   return (
     <div>
@@ -47,7 +21,9 @@ const Singin = () => {
         <label htmlFor="username">Email *</label>
         <input
           className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
-            errors.username ? "border-red-300" : "border-green-100"
+            errors.username || response === "rejected"
+              ? "border-red-300"
+              : "border-green-100"
           }`}
           id="username"
           type="email"
@@ -64,7 +40,9 @@ const Singin = () => {
         <label htmlFor="password">Password *</label>
         <input
           className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
-            errors.password ? "border-red-300" : "border-green-100"
+            errors.password || response === "rejected"
+              ? "border-red-300"
+              : "border-green-100"
           }`}
           id="password"
           type="password"
@@ -79,9 +57,11 @@ const Singin = () => {
         />
         <div className="bg-green-400 rounded-full w-full mt-4">
           <input
-            className={`rounded-full w-full px-6 py-2 font-bold text-white cursor-pointer`}
+            className={`rounded-full w-full px-6 py-2 font-bold text-white ${
+              loading ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
             type="submit"
-            // disabled={loading ? true : false}
+            disabled={loading ? true : false}
             value="Signin"
           />
         </div>
