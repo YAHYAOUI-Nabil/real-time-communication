@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "../../../api/axios";
-import useAuth from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-const SIGNUP_URL = "/user";
+import { useDispatch, useSelector } from "react-redux";
+import { signup } from "../../../api";
 
 const Signup = () => {
-  const { auth, setAuth } = useAuth();
-  const [errMsg, setErrMsg] = useState("");
+  const { loading, response, isRegistered } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
   const [validateUserData, setValidateUserData] = useState();
   const navigate = useNavigate();
 
@@ -19,31 +20,12 @@ const Signup = () => {
   } = useForm();
 
   const submit = async (data) => {
+    setValidateUserData({
+      username: data.username,
+      password: data.password,
+    });
     if (data.password === data.confirmPassword) {
-      try {
-        const response = await axios.post(SIGNUP_URL, JSON.stringify(data), {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        });
-        setValidateUserData({
-          username: data.username,
-          password: data.password,
-        });
-        setAuth({
-          ...auth,
-          isRegistered: true,
-        });
-      } catch (err) {
-        if (!err?.response) {
-          setErrMsg("No Server Response");
-        } else if (err.response?.status === 400) {
-          setErrMsg("Missing Username or Password");
-        } else if (err.response?.status === 401) {
-          setErrMsg("Unauthorized");
-        } else {
-          setErrMsg("Login Failed");
-        }
-      }
+      dispatch(signup(data));
     } else {
       setError("password", {
         type: "manual",
@@ -60,7 +42,7 @@ const Signup = () => {
     if (validateUserData) {
       navigate("/validate-account", { state: validateUserData });
     }
-  }, [auth.isRegistered]);
+  }, [isRegistered]);
 
   return (
     <div>
@@ -68,7 +50,9 @@ const Signup = () => {
         <label htmlFor="fullname">Name *</label>
         <input
           className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
-            errors.fullname ? "border-red-300" : "border-green-100"
+            errors.fullname || response === "rejected"
+              ? "border-red-300"
+              : "border-green-100"
           }`}
           id="fullname"
           type="text"
@@ -79,7 +63,9 @@ const Signup = () => {
         <label htmlFor="username">Email *</label>
         <input
           className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
-            errors.username ? "border-red-300" : "border-green-100"
+            errors.username || response === "rejected"
+              ? "border-red-300"
+              : "border-green-100"
           }`}
           id="username"
           type="email"
@@ -96,7 +82,9 @@ const Signup = () => {
         <label htmlFor="password">Password *</label>
         <input
           className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
-            errors.password ? "border-red-300" : "border-green-100"
+            errors.password || response === "rejected"
+              ? "border-red-300"
+              : "border-green-100"
           }`}
           id="password"
           type="password"
@@ -112,7 +100,9 @@ const Signup = () => {
         <label htmlFor="confirmPassword">Confirm Password *</label>
         <input
           className={`focus:outline-none h-9 p-2 rounded-md border-2 ${
-            errors.confirmPassword ? "border-red-300" : "border-green-100"
+            errors.confirmPassword || response === "rejected"
+              ? "border-red-300"
+              : "border-green-100"
           }`}
           id="confirmPassword"
           type="password"
@@ -127,9 +117,11 @@ const Signup = () => {
         />
         <div className="bg-green-400 rounded-full w-full mt-4">
           <input
-            className={`rounded-full w-full px-6 py-2 font-bold text-white cursor-pointer`}
+            className={`rounded-full w-full px-6 py-2 font-bold text-white ${
+              loading ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
             type="submit"
-            // disabled={loading ? true : false}
+            disabled={loading ? true : false}
             value="Signup"
           />
         </div>

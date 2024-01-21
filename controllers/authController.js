@@ -14,7 +14,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET_KEY,
-    { expiresIn: "5sec" }
+    { expiresIn: "1d" }
   );
   const newRefreshToken = jwt.sign(
     {
@@ -66,6 +66,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   res.json({
     accessToken,
     fullname: req.user.fullname,
+    email: req.user.email,
   });
 });
 

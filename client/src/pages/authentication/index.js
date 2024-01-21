@@ -17,7 +17,7 @@ const Index = () => {
       ) : (
         <div className="flex flex-col gap-4 justify-center items-center h-screen w-full">
           <Header />
-          <div className="flex flex-col gap-4 w-1/3 h-3/4 bg-white rounded-md border-2 border-green-200 p-4">
+          <div className="flex flex-col gap-4 w-1/3 bg-white rounded-md border-2 border-green-200 p-4">
             <div className="flex justify-between gap-2">
               <button
                 onClick={() => setToggle("signin")}

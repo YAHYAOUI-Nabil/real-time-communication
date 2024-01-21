@@ -5,9 +5,13 @@ const Chat = require("../models/chatModel");
 
 exports.getAllMessages = asyncHandler(async (req, res) => {
   try {
-    const messages = await Message.find({ chat: req.params.chatId })
+    var messages = await Message.find({ chat: req.params.chatId })
       .populate("sender", "fullname pic email")
       .populate("chat");
+    messages = await User.populate(messages, {
+      path: "chat.users",
+      select: "fullname pic email",
+    });
     res.json(messages);
   } catch (error) {
     res.status(400);
@@ -38,7 +42,6 @@ exports.sendMessage = asyncHandler(async (req, res) => {
       path: "chat.users",
       select: "fullname pic email",
     });
-    console.log(message.chat);
 
     await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
 

@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signin, logout } from "../../api";
+import { signin, signup, logout, validateUser } from "../../api";
 
 const initialState = {
   loading: false,
   error: {},
   user: {},
   isAuth: false,
+  isRegistered: false,
   response: "",
 };
 
@@ -33,6 +34,47 @@ export const authSlice = createSlice({
           loading: false,
           error: action.error,
           response: "rejected",
+          user: {},
+        };
+      })
+      .addCase(signup.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(signup.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          response: "registered",
+          isRegistered: true,
+        };
+      })
+      .addCase(signup.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error,
+          response: "rejected",
+        };
+      })
+      .addCase(validateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(validateUser.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          user: action.payload,
+          response: "validation fulfilled",
+          isAuth: true,
+          isRegistered: false,
+        };
+      })
+      .addCase(validateUser.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error,
+          response: "validation rejected",
           user: {},
         };
       })

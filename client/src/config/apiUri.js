@@ -4,3 +4,6 @@ export const REFRESH_TOKEN_URI = `${process.env.REACT_APP_API_URL}/auth/refresh`
 export const SIGNUP_URI = `${process.env.REACT_APP_API_URL}/user`;
 export const VALIDATE_USER_URI = `${process.env.REACT_APP_API_URL}/user/validate-user`;
 export const FETCH_USERS_URI = `${process.env.REACT_APP_API_URL}/user`;
+export const FETCH_MESSAGES_URI = `${process.env.REACT_APP_API_URL}/message`;
+export const SEND_MESSAGE_URI = `${process.env.REACT_APP_API_URL}/message`;
+export const FETCH_CHATS_URI = `${process.env.REACT_APP_API_URL}/chat`;

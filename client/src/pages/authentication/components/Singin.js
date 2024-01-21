@@ -15,6 +15,7 @@ const Singin = () => {
   const submit = async (data) => {
     dispatch(signin(data));
   };
+
   return (
     <div>
       <form className="flex flex-col gap-2" onSubmit={handleSubmit(submit)}>

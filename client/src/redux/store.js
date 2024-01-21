@@ -13,6 +13,9 @@ import {
 import storage from "redux-persist/lib/storage";
 
 import authSlice from "../pages/authentication/authSlice";
+import userSlice from "../pages/authentication/userSlice";
+import messageSlice from "../pages/chat/messageSlice";
+import chatSlice from "../pages/chat/chatSlice";
 
 const persistConfig = {
   key: "root",
@@ -22,6 +25,9 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authSlice,
+  users: userSlice,
+  message: messageSlice,
+  chat: chatSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

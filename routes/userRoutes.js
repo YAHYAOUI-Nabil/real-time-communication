@@ -6,7 +6,7 @@ const checkUserValidity = require("../middlewares/checkUserValidity");
 const authenticate = require("../middlewares/authenticate");
 
 router.post("/", rateLimiter, userController.register);
-router.post(
+router.put(
   "/validate-user",
   rateLimiter,
   checkUserValidity.checkUserIsNotValid,
