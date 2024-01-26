@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUsers } from "../../api";
+import { fetchUsers, logout } from "../../api";
 
 const initialState = {
   loading: false,
@@ -15,7 +15,10 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.pending, (state) => {
-        state.loading = true;
+        return {
+          ...state,
+          loading: true,
+        };
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         return {
@@ -32,6 +35,25 @@ export const userSlice = createSlice({
           error: action.error,
           response: "fetch users rejected",
           users: [],
+        };
+      })
+      .addCase(logout.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+        };
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        return {
+          initialState,
+        };
+      })
+      .addCase(logout.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error,
+          response: "logout rejected",
         };
       });
   },

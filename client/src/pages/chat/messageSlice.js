@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMessages } from "../../api";
+import { fetchMessages, logout } from "../../api";
 
 const initialState = {
   loading: false,
@@ -15,7 +15,10 @@ export const messageSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchMessages.pending, (state) => {
-        state.loading = true;
+        return {
+          ...state,
+          loading: true,
+        };
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
         return {
@@ -32,6 +35,25 @@ export const messageSlice = createSlice({
           error: action.error,
           response: "fetch messages rejected",
           messages: [],
+        };
+      })
+      .addCase(logout.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+        };
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        return {
+          initialState,
+        };
+      })
+      .addCase(logout.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error,
+          response: "logout rejected",
         };
       });
   },

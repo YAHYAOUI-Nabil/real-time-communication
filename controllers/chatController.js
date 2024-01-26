@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Chat = require("../models/chatModel");
 const User = require("../models/userModel");
 
-exports.accessChat = asyncHandler(async (req, res) => {
+exports.startChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
   const sender = await User.findById(req.user._id);
   if (!userId) {
@@ -25,7 +25,9 @@ exports.accessChat = asyncHandler(async (req, res) => {
   });
 
   if (isChat.length > 0) {
-    res.send(isChat[0]);
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.json(isChat[0]);
   } else {
     var chatData = {
       chatName: sender.fullname,
@@ -39,11 +41,35 @@ exports.accessChat = asyncHandler(async (req, res) => {
         "users",
         "-password"
       );
-      res.status(200).json(FullChat);
+      res.statusCode = 201;
+      res.setHeader("Content-Type", "application/json");
+      res.json(FullChat);
     } catch (error) {
-      res.status(400);
-      throw new Error(error.message);
+      res.statusCode = 400;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ message: error.message });
     }
+  }
+});
+
+exports.accessChat = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  try {
+    var chatExist = await Chat.findById(id)
+      .populate("users", "-password")
+      .populate("latestMessage");
+
+    chatExist = await User.populate(chatExist, {
+      path: "latestMessage.sender",
+      select: "fullname pic email",
+    });
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.json(chatExist);
+  } catch (error) {
+    res.statusCode = 400;
+    res.setHeader("Content-Type", "application/json");
+    res.json({ message: error.message });
   }
 });
 

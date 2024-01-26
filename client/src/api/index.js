@@ -5,4 +5,10 @@ export {
   validateUser,
   fetchUsers,
 } from "../pages/authentication/authenticationApi";
-export { fetchMessages, fetchChats, sendMessage } from "../pages/chat/chatApi";
+export {
+  fetchMessages,
+  fetchChats,
+  sendMessage,
+  accessChat,
+  startChat,
+} from "../pages/chat/chatApi";
