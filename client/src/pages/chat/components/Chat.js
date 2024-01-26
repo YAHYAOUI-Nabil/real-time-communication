@@ -1,15 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { sendMessage, fetchMessages } from "../../../api";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-
+import io from "socket.io-client";
+var socket, selectedChatCompare;
 const Chat = () => {
   const { messages } = useSelector((state) => state.message);
   const { chat } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [istyping, setIsTyping] = useState(false);
 
   const {
     register,
@@ -30,8 +34,17 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    socket = io(process.env.REACT_APP_API_URL);
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+  }, []);
+
+  useEffect(() => {
     if (chat) {
       dispatch(fetchMessages({ axiosPrivate, id }));
+      socket.emit("join chat", chat._id);
     }
   }, [chat]);
 
@@ -86,6 +99,13 @@ const Chat = () => {
         </div>
       )}
       <div className="flex items-center h-[44px] w-full">
+        {istyping ? (
+          <div>
+            <p className="text-base text-green-500">typing...</p>
+          </div>
+        ) : (
+          <></>
+        )}
         <form
           className="flex flex-row items-center gap-2 w-full"
           onSubmit={handleSubmit(submit)}

@@ -14,7 +14,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET_KEY,
-    { expiresIn: "5d" }
+    { expiresIn: "15sec" }
   );
   const newRefreshToken = jwt.sign(
     {
@@ -22,7 +22,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       id: req.user._id,
     },
     process.env.REFRESH_TOKEN_SECRET_KEY,
-    { expiresIn: "10d" }
+    { expiresIn: "1d" }
   );
 
   // Changed to let keyword
@@ -124,7 +124,7 @@ exports.refresh = asyncHandler(async (req, res) => {
           },
         },
         process.env.ACCESS_TOKEN_SECRET_KEY,
-        { expiresIn: "5d" }
+        { expiresIn: "15sec" }
       );
 
       const newRefreshToken = jwt.sign(
@@ -133,7 +133,7 @@ exports.refresh = asyncHandler(async (req, res) => {
           id: foundUser._id,
         },
         process.env.REFRESH_TOKEN_SECRET_KEY,
-        { expiresIn: "10d" }
+        { expiresIn: "1d" }
       );
       // Saving refreshToken with current user
       foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];
