@@ -20,14 +20,14 @@ const MyChats = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 bg-white h-64 rounded-md border-2 border-green-200">
+    <div className="flex flex-col gap-2 bg-white h-[262px] rounded-md border-2 border-green-200">
       <div className="flex flex-row items-center p-2 justify-between">
         <p className="text-xl font-medium">My chats</p>
         <button className="p-2 text-sm font-medium border-2 border-green-200 rounded-md">
           New Group Chat
         </button>
       </div>
-      <div className="flex flex-col gap-2 p-2 overflow-auto overflow-x-hidden">
+      <div className="flex flex-col gap-2 p-2 overflow-auto overflow-x-hidden scrollbar-hide">
         {chats?.length > 0 ? (
           chats
             ?.filter((chat) => chat?.hasOwnProperty("latestMessage"))

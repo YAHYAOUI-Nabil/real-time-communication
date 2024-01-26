@@ -15,7 +15,7 @@ const Navbar = () => {
     dispatch(logout());
   };
   return (
-    <div>
+    <div className="h-12">
       <div className="flex flex-row justify-between items-center w-full h-12 px-4 bg-white border-2 border-green-200">
         <div>
           <FaSearch />

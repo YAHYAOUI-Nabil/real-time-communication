@@ -3,7 +3,9 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 var passport = require("passport");
-
+const { logger } = require("./middlewares/logEvents");
+const errorHandler = require("./middlewares/errorHandler");
+const credentials = require("./middlewares/credentials");
 const port = parseInt(process.env.PORT) || 5000;
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -18,6 +20,8 @@ const chatRoutes = require("./routes/chatRoutes");
 
 DBconne();
 
+app.use(logger);
+app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
@@ -44,6 +48,8 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
   });
 }
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`server is running on ${port}`);

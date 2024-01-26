@@ -39,10 +39,10 @@ const Chat = () => {
     <div
       className={`flex flex-col ${
         messages ? "justify-between" : "justify-end"
-      } p-2 w-3/4 bg-white h-[100%] rounded-md border-2 border-green-200`}
+      } gap-2 p-2 w-3/4 bg-white h-[532px] rounded-md border-2 border-green-200`}
     >
       {messages && (
-        <div>
+        <div className="flex flex-col justify-between h-[472px] gap-2">
           <p className="text-lg">
             <b>
               {messages &&
@@ -53,7 +53,7 @@ const Chat = () => {
                   .find((name) => name !== user.fullname)}
             </b>
           </p>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 overflow-auto scrollbar-hide">
             <div className="flex flex-col gap-2">
               {messages?.length > 0 &&
                 messages?.map((message) =>
@@ -85,9 +85,9 @@ const Chat = () => {
           </div>
         </div>
       )}
-      <div>
+      <div className="flex items-center h-[44px] w-full">
         <form
-          className="flex flex-row items-center gap-2"
+          className="flex flex-row items-center gap-2 w-full"
           onSubmit={handleSubmit(submit)}
         >
           <input

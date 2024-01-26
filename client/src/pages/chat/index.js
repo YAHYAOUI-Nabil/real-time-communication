@@ -10,7 +10,7 @@ const Index = () => {
   return (
     <div className="flex flex-col h-screen w-full">
       <Navbar />
-      <div className="flex flex-row gap-2 p-2 h-max">
+      <div className="flex flex-row gap-2 p-2 grow">
         <Sidebar />
         {chat && <Chat />}
       </div>
