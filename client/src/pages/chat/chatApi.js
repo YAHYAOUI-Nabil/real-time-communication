@@ -34,7 +34,6 @@ export const fetchChats = createAsyncThunk(
 export const startChat = createAsyncThunk(
   "chat/startChat",
   async ({ axiosPrivate, data }) => {
-    console.log(data);
     const response = await axiosPrivate.post(ACCESS_CHAT_URI, data);
     return response.data;
   }

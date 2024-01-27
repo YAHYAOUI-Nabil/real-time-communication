@@ -5,7 +5,7 @@ const initialState = {
   loading: false,
   error: {},
   chats: [],
-  chat: {},
+  chat: null,
   response: "",
 };
 
@@ -35,7 +35,7 @@ export const chatSlice = createSlice({
           loading: false,
           error: action.error,
           response: "starts chat rejected",
-          chat: {},
+          chat: null,
         };
       })
       .addCase(accessChat.pending, (state) => {

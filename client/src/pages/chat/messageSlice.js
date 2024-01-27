@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMessages, logout } from "../../api";
+import { fetchMessages, logout, sendMessage } from "../../api";
 
 const initialState = {
   loading: false,
   error: {},
   messages: [],
+  message: {},
   response: "",
 };
 
@@ -14,6 +15,29 @@ export const messageSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(sendMessage.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+        };
+      })
+      .addCase(sendMessage.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          response: "send message fulfilled",
+          message: action.payload,
+        };
+      })
+      .addCase(sendMessage.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error,
+          response: "send message rejected",
+          messages: {},
+        };
+      })
       .addCase(fetchMessages.pending, (state) => {
         return {
           ...state,

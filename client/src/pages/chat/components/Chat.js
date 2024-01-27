@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { sendMessage, fetchMessages } from "../../../api";
@@ -6,7 +6,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import io from "socket.io-client";
 var socket, selectedChatCompare;
 const Chat = () => {
-  const { messages } = useSelector((state) => state.message);
+  const { messages, message } = useSelector((state) => state.message);
   const { chat } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -23,11 +23,13 @@ const Chat = () => {
   } = useForm();
 
   const id = chat?._id;
+
   const submit = async (data) => {
     const formData = {
       content: data.sms,
       chatId: id,
     };
+
     dispatch(sendMessage({ axiosPrivate, formData }));
     dispatch(fetchMessages({ axiosPrivate, id }));
     resetField("sms");
@@ -45,8 +47,58 @@ const Chat = () => {
     if (chat) {
       dispatch(fetchMessages({ axiosPrivate, id }));
       socket.emit("join chat", chat._id);
+      selectedChatCompare = chat;
     }
-  }, [chat]);
+  }, [chat, message]);
+
+  useEffect(() => {
+    if (message) {
+      socket.emit("new message", message);
+    }
+  }, [message]);
+
+  useEffect(() => {
+    console.log("test message recieved");
+    socket.on("message recieved", (newMessageRecieved) => {
+      console.log(newMessageRecieved);
+      if (
+        selectedChatCompare || // if chat is not selected or doesn't match current chat
+        selectedChatCompare._id === newMessageRecieved.chat._id
+      ) {
+        messages.push(newMessageRecieved);
+        console.log(messages);
+      }
+    });
+  });
+
+  const typingHandler = () => {
+    if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", chat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", chat._id);
+        setTyping(false);
+      }
+    }, timerLength);
+  };
+
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div
@@ -55,7 +107,11 @@ const Chat = () => {
       } gap-2 p-2 w-3/4 bg-white h-[532px] rounded-md border-2 border-green-200`}
     >
       {messages && (
-        <div className="flex flex-col justify-between h-[472px] gap-2">
+        <div
+          className={`${
+            istyping ? "h-[424px]" : "h-[464px]"
+          } flex flex-col justify-between gap-2`}
+        >
           <p className="text-lg">
             <b>
               {messages &&
@@ -94,13 +150,18 @@ const Chat = () => {
                     </div>
                   )
                 )}
+              <div ref={messagesEndRef} />
             </div>
           </div>
         </div>
       )}
-      <div className="flex items-center h-[44px] w-full">
+      <div
+        className={`${
+          istyping ? "h-[66px]" : "h-[36px]"
+        } flex flex-col justify-between w-full`}
+      >
         {istyping ? (
-          <div>
+          <div className="w-full">
             <p className="text-base text-green-500">typing...</p>
           </div>
         ) : (
@@ -114,8 +175,12 @@ const Chat = () => {
             className={`focus:outline-none w-full h-9 px-2 py-1 rounded-md border-2 border-green-400`}
             id="sms"
             type="text"
+            placeholder="Enter a message.."
             {...register("sms", {
               required: true,
+              onChange: () => {
+                typingHandler();
+              },
             })}
           />
           <div className="bg-green-400 rounded-full">
