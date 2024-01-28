@@ -5,6 +5,7 @@ import { sendMessage, fetchMessages } from "../../../api";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import io from "socket.io-client";
 var socket, selectedChatCompare;
+
 const Chat = () => {
   const { messages, message } = useSelector((state) => state.message);
   const { chat } = useSelector((state) => state.chat);
@@ -31,7 +32,6 @@ const Chat = () => {
     };
 
     dispatch(sendMessage({ axiosPrivate, formData }));
-    dispatch(fetchMessages({ axiosPrivate, id }));
     resetField("sms");
   };
 
@@ -58,18 +58,15 @@ const Chat = () => {
   }, [message]);
 
   useEffect(() => {
-    console.log("test message recieved");
     socket.on("message recieved", (newMessageRecieved) => {
-      console.log(newMessageRecieved);
       if (
         selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id === newMessageRecieved.chat._id
       ) {
-        messages.push(newMessageRecieved);
-        console.log(messages);
+        dispatch(fetchMessages({ axiosPrivate, id }));
       }
     });
-  });
+  }, []);
 
   const typingHandler = () => {
     if (!socketConnected) return;
@@ -114,42 +111,37 @@ const Chat = () => {
         >
           <p className="text-lg">
             <b>
-              {messages &&
-                messages[0]?.chat?.users
-                  .map((user) => {
-                    return user.fullname;
-                  })
-                  .find((name) => name !== user.fullname)}
+              {messages[0]?.chat?.users
+                .map((user) => {
+                  return user.fullname;
+                })
+                .find((name) => name !== user.fullname)}
             </b>
           </p>
           <div className="flex flex-col gap-4 overflow-auto scrollbar-hide">
             <div className="flex flex-col gap-2">
-              {messages?.length > 0 &&
-                messages?.map((message) =>
-                  message.sender.fullname === user.fullname ? (
-                    <div
-                      key={message._id}
-                      className="flex flex-row justify-end"
-                    >
-                      <div className="w-fit px-2 py-1 bg-green-400 text-white rounded-md">
-                        <p>
-                          <b>{message?.content}</b>
-                        </p>
-                      </div>
+              {messages?.map((message) =>
+                message.sender.fullname === user.fullname ? (
+                  <div key={message._id} className="flex flex-row justify-end">
+                    <div className="w-fit px-2 py-1 bg-green-400 text-white rounded-md">
+                      <p>
+                        <b>{message?.content}</b>
+                      </p>
                     </div>
-                  ) : (
-                    <div
-                      key={message._id}
-                      className="flex flex-row justify-start"
-                    >
-                      <div className="w-fit px-2 py-1 bg-gray-400 text-black rounded-md">
-                        <p>
-                          <b>{message?.content}</b>
-                        </p>
-                      </div>
+                  </div>
+                ) : (
+                  <div
+                    key={message._id}
+                    className="flex flex-row justify-start"
+                  >
+                    <div className="w-fit px-2 py-1 bg-gray-400 text-black rounded-md">
+                      <p>
+                        <b>{message?.content}</b>
+                      </p>
                     </div>
-                  )
-                )}
+                  </div>
+                )
+              )}
               <div ref={messagesEndRef} />
             </div>
           </div>
