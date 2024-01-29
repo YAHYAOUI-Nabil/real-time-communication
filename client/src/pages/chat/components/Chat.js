@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
-import { sendMessage, fetchMessages } from "../../../api";
+import { sendMessage, fetchMessages, fetchChats } from "../../../api";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import io from "socket.io-client";
 var socket, selectedChatCompare;
@@ -30,7 +30,7 @@ const Chat = () => {
       content: data.sms,
       chatId: id,
     };
-
+    socket.emit("stop typing", chat?._id);
     dispatch(sendMessage({ axiosPrivate, formData }));
     resetField("sms");
   };
@@ -54,16 +54,21 @@ const Chat = () => {
   useEffect(() => {
     if (message) {
       socket.emit("new message", message);
+      dispatch(fetchChats(axiosPrivate));
     }
   }, [message]);
 
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
-        selectedChatCompare || // if chat is not selected or doesn't match current chat
-        selectedChatCompare._id === newMessageRecieved.chat._id
+        !selectedChatCompare || // if chat is not selected or doesn't match current chat
+        selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-        dispatch(fetchMessages({ axiosPrivate, id }));
+        dispatch(fetchChats(axiosPrivate));
+      } else {
+        dispatch(
+          fetchMessages({ axiosPrivate, id: newMessageRecieved.chat._id })
+        );
       }
     });
   }, []);
@@ -98,92 +103,103 @@ const Chat = () => {
   }, [messages]);
 
   return (
-    <div
-      className={`flex flex-col ${
-        messages ? "justify-between" : "justify-end"
-      } gap-2 p-2 w-3/4 bg-white h-[532px] rounded-md border-2 border-green-200`}
-    >
-      {messages && (
+    <div className="p-2 w-3/4 bg-white h-[532px] rounded-md border-2 border-green-200">
+      {chat ? (
         <div
-          className={`${
-            istyping ? "h-[424px]" : "h-[464px]"
-          } flex flex-col justify-between gap-2`}
+          className={`flex flex-col ${
+            messages ? "justify-between" : "justify-end"
+          } gap-2`}
         >
-          <p className="text-lg">
-            <b>
-              {messages[0]?.chat?.users
-                .map((user) => {
-                  return user.fullname;
-                })
-                .find((name) => name !== user.fullname)}
-            </b>
-          </p>
-          <div className="flex flex-col gap-4 overflow-auto scrollbar-hide">
-            <div className="flex flex-col gap-2">
-              {messages?.map((message) =>
-                message.sender.fullname === user.fullname ? (
-                  <div key={message._id} className="flex flex-row justify-end">
-                    <div className="w-fit px-2 py-1 bg-green-400 text-white rounded-md">
-                      <p>
-                        <b>{message?.content}</b>
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    key={message._id}
-                    className="flex flex-row justify-start"
-                  >
-                    <div className="w-fit px-2 py-1 bg-gray-400 text-black rounded-md">
-                      <p>
-                        <b>{message?.content}</b>
-                      </p>
-                    </div>
-                  </div>
-                )
-              )}
-              <div ref={messagesEndRef} />
+          {messages && (
+            <div
+              className={`${
+                istyping ? "h-[424px]" : "h-[464px]"
+              } flex flex-col justify-between gap-2`}
+            >
+              <p className="text-lg">
+                <b>
+                  {messages[0]?.chat?.users
+                    .map((user) => {
+                      return user.fullname;
+                    })
+                    .find((name) => name !== user.fullname)}
+                </b>
+              </p>
+              <div className="flex flex-col gap-4 overflow-auto scrollbar-hide">
+                <div className="flex flex-col gap-2">
+                  {messages?.map((message) =>
+                    message.sender.fullname === user.fullname ? (
+                      <div
+                        key={message._id}
+                        className="flex flex-row justify-end"
+                      >
+                        <div className="w-fit px-2 py-1 bg-green-400 text-white rounded-md">
+                          <p>
+                            <b>{message?.content}</b>
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        key={message._id}
+                        className="flex flex-row justify-start"
+                      >
+                        <div className="w-fit px-2 py-1 bg-gray-400 text-black rounded-md">
+                          <p>
+                            <b>{message?.content}</b>
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
+              </div>
             </div>
+          )}
+          <div
+            className={`${
+              istyping ? "h-[66px]" : "h-[36px]"
+            } flex flex-col justify-between w-full`}
+          >
+            {istyping ? (
+              <div className="w-full">
+                <p className="text-base text-green-500">typing...</p>
+              </div>
+            ) : (
+              <></>
+            )}
+            <form
+              className="flex flex-row items-center gap-2 w-full"
+              onSubmit={handleSubmit(submit)}
+            >
+              <input
+                className={`focus:outline-none w-full h-9 px-2 py-1 rounded-md border-2 border-green-400`}
+                id="sms"
+                type="text"
+                placeholder="Enter a message.."
+                {...register("sms", {
+                  required: true,
+                  onChange: () => {
+                    typingHandler();
+                  },
+                })}
+              />
+              <div className="bg-green-400 rounded-full">
+                <input
+                  className={`rounded-full px-4 py-1 font-bold text-white cursor-pointer`}
+                  type="submit"
+                  value="send"
+                />
+              </div>
+            </form>
           </div>
         </div>
+      ) : (
+        <div>
+          <p>Click on a user to start chatting</p>
+        </div>
       )}
-      <div
-        className={`${
-          istyping ? "h-[66px]" : "h-[36px]"
-        } flex flex-col justify-between w-full`}
-      >
-        {istyping ? (
-          <div className="w-full">
-            <p className="text-base text-green-500">typing...</p>
-          </div>
-        ) : (
-          <></>
-        )}
-        <form
-          className="flex flex-row items-center gap-2 w-full"
-          onSubmit={handleSubmit(submit)}
-        >
-          <input
-            className={`focus:outline-none w-full h-9 px-2 py-1 rounded-md border-2 border-green-400`}
-            id="sms"
-            type="text"
-            placeholder="Enter a message.."
-            {...register("sms", {
-              required: true,
-              onChange: () => {
-                typingHandler();
-              },
-            })}
-          />
-          <div className="bg-green-400 rounded-full">
-            <input
-              className={`rounded-full px-4 py-1 font-bold text-white cursor-pointer`}
-              type="submit"
-              value="send"
-            />
-          </div>
-        </form>
-      </div>
     </div>
   );
 };
