@@ -4,3 +4,10 @@
 20240127	11:44:44	5cda5e9f-c4aa-4575-854a-e3ee558844a4	Error: Cast to ObjectId failed for value "undefined" (type string) at path "chat" for model "Message"
 20240129	00:55:40	3960499f-4fca-4b27-9f0d-492653973e4f	Error: Cast to ObjectId failed for value "undefined" (type string) at path "chat" for model "Message"
 20240129	01:50:16	ad0749a4-0647-4c21-b33a-358dd442fc27	Error: Cast to ObjectId failed for value "undefined" (type string) at path "chat" for model "Message"
+20240202	18:41:56	fcc806bf-a18a-4617-a25a-2c6db3e1d040	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+20240202	18:44:58	76205123-c3b4-4258-a007-4c3739059227	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+20240202	18:44:58	e65f3bfd-a861-4e89-8f19-f5a2095797bb	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+20240202	18:45:45	efeb47d6-e3cc-4efb-afc2-e00ba90b796a	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+20240202	18:45:45	b3f05b1c-17e4-4fb8-9dbc-b155c4410fad	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+20240202	19:00:53	03f76d35-9224-4ce3-ba47-b204051768f3	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+20240202	19:00:53	a21b57d5-5a52-42fb-911d-0b879720a375	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms

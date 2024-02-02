@@ -10,9 +10,14 @@ router.post(
   notificationController.sendNotification
 );
 router.get(
-  "/:userId",
+  "/",
   authenticate.verifyUser,
   notificationController.getAllNotifications
+);
+router.delete(
+  "/:notificationId",
+  authenticate.verifyUser,
+  notificationController.deleteNotification
 );
 
 module.exports = router;

@@ -8,6 +8,7 @@ import avatar from "../../../data/avatar.png";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
+  const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   const [showBtn, setShowBtn] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -23,22 +24,30 @@ const Navbar = () => {
         <p className="text-center text-xl uppercase font-bold text-green-400">
           IJA-NAHKIW
         </p>
-        <div className="flex flex-row gap-1 items-center">
-          <MdNotifications className="h-6 w-6 text-green-400" />
-          <img
-            src={avatar}
-            alt={user.fullname}
-            className="h-6 w-6 rounded-full"
-          />
-          <p
+        <div className="flex flex-row gap-3 items-center">
+          <div className="relative cursor-pointer">
+            {notifications?.length > 0 && (
+              <div className="absolute -top-2 -right-2 bg-red-600 h-5 w-5 rounded-full text-white text-xs font-semibold flex justify-center items-center">
+                <p>{notifications?.length}</p>
+              </div>
+            )}
+            <MdNotifications className="h-6 w-6 text-green-400" />
+          </div>
+          <div
+            className="flex gap-1 cursor-pointer"
             onClick={() => setShowProfile(true)}
-            className="font-semibold cursor-pointer"
           >
-            {user.fullname}
-          </p>
+            <img
+              src={avatar}
+              alt={user.fullname}
+              className="h-6 w-6 rounded-full"
+            />
+            <p className="font-semibold cursor-pointer">{user.fullname}</p>
+          </div>
+
           <MdKeyboardArrowDown
             onClick={() => setShowBtn(!showBtn)}
-            className="h-6 w-6 text-green-400 cursor-pointer"
+            className="h-6 w-6 text-green-400"
           />
         </div>
       </div>

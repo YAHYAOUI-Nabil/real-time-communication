@@ -11,4 +11,7 @@ export {
   sendMessage,
   accessChat,
   startChat,
+  fetchNotifications,
+  sendNotifications,
+  deleteNotification,
 } from "../pages/chat/chatApi";

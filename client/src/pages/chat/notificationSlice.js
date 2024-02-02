@@ -1,64 +1,70 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMessages, logout, sendMessage } from "../../api";
+import {
+  fetchNotifications,
+  logout,
+  sendNotifications,
+  deleteNotification,
+} from "../../api";
 
 const initialState = {
   loading: false,
   error: {},
-  messages: [],
-  message: {},
+  notifications: [],
+  newNotification: {},
   response: "",
 };
 
-export const messageSlice = createSlice({
-  name: "message",
+export const notificationSlice = createSlice({
+  name: "notification",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(sendMessage.pending, (state) => {
+      .addCase(sendNotifications.pending, (state) => {
         return {
           ...state,
           loading: true,
         };
       })
-      .addCase(sendMessage.fulfilled, (state, action) => {
+      .addCase(sendNotifications.fulfilled, (state, action) => {
         return {
           ...state,
           loading: false,
-          response: "send message fulfilled",
-          message: action.payload,
+          response: "send notification fulfilled",
+          newNotification: action.payload,
         };
       })
-      .addCase(sendMessage.rejected, (state, action) => {
+      .addCase(sendNotifications.rejected, (state, action) => {
         return {
           ...state,
           loading: false,
           error: action.error,
-          response: "send message rejected",
-          message: {},
+          response: "send notification rejected",
+          notifications: [],
+          newNotification: {},
         };
       })
-      .addCase(fetchMessages.pending, (state) => {
+      .addCase(fetchNotifications.pending, (state) => {
         return {
           ...state,
           loading: true,
         };
       })
-      .addCase(fetchMessages.fulfilled, (state, action) => {
+      .addCase(fetchNotifications.fulfilled, (state, action) => {
         return {
           ...state,
           loading: false,
-          response: "fetch messages fulfilled",
-          messages: action.payload,
+          response: "fetch notifications fulfilled",
+          notifications: action.payload,
         };
       })
-      .addCase(fetchMessages.rejected, (state, action) => {
+      .addCase(fetchNotifications.rejected, (state, action) => {
         return {
           ...state,
           loading: false,
           error: action.error,
-          response: "fetch messages rejected",
-          messages: [],
+          response: "fetch notifications rejected",
+          notifications: [],
         };
       })
       .addCase(logout.pending, (state) => {
@@ -83,4 +89,4 @@ export const messageSlice = createSlice({
   },
 });
 
-export default messageSlice.reducer;
+export default notificationSlice.reducer;

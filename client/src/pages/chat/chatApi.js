@@ -5,6 +5,7 @@ import {
   FETCH_CHATS_URI,
   SEND_MESSAGE_URI,
   ACCESS_CHAT_URI,
+  NOTIFICATION_URI,
 } from "../../config/apiUri";
 
 export const fetchMessages = createAsyncThunk(
@@ -43,6 +44,30 @@ export const accessChat = createAsyncThunk(
   "chat/accessChat",
   async ({ axiosPrivate, id }) => {
     const response = await axiosPrivate.get(ACCESS_CHAT_URI + "/" + id);
+    return response.data;
+  }
+);
+
+export const fetchNotifications = createAsyncThunk(
+  "notifications/fetchNotifications",
+  async (axiosPrivate) => {
+    const response = await axiosPrivate.get(NOTIFICATION_URI);
+    return response.data;
+  }
+);
+
+export const sendNotifications = createAsyncThunk(
+  "notifications/sendNotifications",
+  async ({ axiosPrivate, formData }) => {
+    const response = await axiosPrivate.post(NOTIFICATION_URI, formData);
+    return response.data;
+  }
+);
+
+export const deleteNotification = createAsyncThunk(
+  "notifications/deleteNotifications",
+  async ({ axiosPrivate, id }) => {
+    const response = await axiosPrivate.delete(NOTIFICATION_URI + "/" + id);
     return response.data;
   }
 );

@@ -16,6 +16,7 @@ import authSlice from "../pages/authentication/authSlice";
 import userSlice from "../pages/authentication/userSlice";
 import messageSlice from "../pages/chat/messageSlice";
 import chatSlice from "../pages/chat/chatSlice";
+import notificationSlice from "../pages/chat/notificationSlice";
 
 const persistConfig = {
   key: "root",
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   users: userSlice,
   message: messageSlice,
   chat: chatSlice,
+  notification: notificationSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

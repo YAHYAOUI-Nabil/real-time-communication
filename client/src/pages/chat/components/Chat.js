@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
-import { sendMessage, fetchMessages, fetchChats } from "../../../api";
+import {
+  sendMessage,
+  fetchMessages,
+  fetchChats,
+  sendNotifications,
+} from "../../../api";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import io from "socket.io-client";
 var socket, selectedChatCompare;
@@ -64,7 +69,16 @@ const Chat = () => {
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageReceived.chat._id
       ) {
-        console.log("Notify me with messages recieved");
+        dispatch(
+          sendNotifications({
+            axiosPrivate,
+            formData: {
+              latestMessage: newMessageReceived._id,
+              chatId: newMessageReceived.chat._id,
+              userId: newMessageReceived.sender._id,
+            },
+          })
+        );
       } else {
         dispatch(
           fetchMessages({ axiosPrivate, id: newMessageReceived.chat._id })

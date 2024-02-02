@@ -8,3 +8,4 @@ export const FETCH_MESSAGES_URI = `${process.env.REACT_APP_API_URL}/message`;
 export const SEND_MESSAGE_URI = `${process.env.REACT_APP_API_URL}/message`;
 export const FETCH_CHATS_URI = `${process.env.REACT_APP_API_URL}/chat`;
 export const ACCESS_CHAT_URI = `${process.env.REACT_APP_API_URL}/chat`;
+export const NOTIFICATION_URI = `${process.env.REACT_APP_API_URL}/notification`;
