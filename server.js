@@ -17,6 +17,7 @@ const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 DBconne();
 
@@ -41,6 +42,7 @@ app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/message", messageRoutes);
 app.use("/chat", chatRoutes);
+app.use("/notification", notificationRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("./client/build"));

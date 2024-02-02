@@ -8045,3 +8045,9 @@
 20240202	14:58:42	863408ac-af7e-4c80-88be-8daa51f034a0	GET	http://localhost:3000	/message/65bcef2d23217dac8ee17790
 20240202	14:58:42	11369b8f-ce89-4f50-8506-80d6989733bf	GET	http://localhost:3000	/chat
 20240202	14:58:42	81cfb92c-6f22-427e-a9d1-f7ac23ed55c2	GET	http://localhost:3000	/chat
+20240202	17:05:16	1091426b-881b-4178-8c96-4b980ca52f2f	POST	undefined	/auth/login
+20240202	17:09:02	10690cc8-2db1-4248-b458-2eefad756bcb	POST	undefined	/notification
+20240202	17:10:02	a03aa1e1-9df7-440b-8c8d-6a0693bb56bb	GET	undefined	/notification/65ac59bdaf840271b35dfb27
+20240202	17:11:13	3d6781e5-04e5-452c-8f37-c53716ad1f19	GET	undefined	/notification/65ac59bdaf840271b35dfb27
+20240202	17:11:18	d5f3eae0-4578-45ea-a2c1-9b64f6083a4a	POST	undefined	/auth/login
+20240202	17:11:44	1ba9c853-0932-46cd-9754-6d0fc826c93c	GET	undefined	/notification/65ac59bdaf840271b35dfb27
