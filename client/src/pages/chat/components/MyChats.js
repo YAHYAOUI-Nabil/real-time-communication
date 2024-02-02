@@ -78,8 +78,8 @@ const MyChats = () => {
                       {chat?.latestMessage?.sender?.fullname ===
                         user.fullname && " You: "}
                     </b>
-                    {chat?.latestMessage.content.length > 35
-                      ? chat?.latestMessage.content.substring(0, 35) + "..."
+                    {chat?.latestMessage.content.length > 12
+                      ? chat?.latestMessage.content.substring(0, 12) + "..."
                       : chat?.latestMessage.content}
                   </p>
                 </div>

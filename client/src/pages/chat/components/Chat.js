@@ -59,17 +59,18 @@ const Chat = () => {
   }, [message]);
 
   useEffect(() => {
-    socket.on("message recieved", (newMessageRecieved) => {
+    socket.on("message received", (newMessageReceived) => {
       if (
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
-        selectedChatCompare._id !== newMessageRecieved.chat._id
+        selectedChatCompare._id !== newMessageReceived.chat._id
       ) {
-        dispatch(fetchChats(axiosPrivate));
+        console.log("Notify me with messages recieved");
       } else {
         dispatch(
-          fetchMessages({ axiosPrivate, id: newMessageRecieved.chat._id })
+          fetchMessages({ axiosPrivate, id: newMessageReceived.chat._id })
         );
       }
+      dispatch(fetchChats(axiosPrivate));
     });
   }, []);
 
