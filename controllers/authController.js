@@ -147,7 +147,11 @@ exports.refresh = asyncHandler(async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
       });
 
-      res.json({ accessToken });
+      res.json({
+        accessToken,
+        fullname: foundUser.fullname,
+        email: foundUser.email,
+      });
     }
   );
 });

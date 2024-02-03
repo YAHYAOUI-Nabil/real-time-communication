@@ -67,6 +67,28 @@ export const notificationSlice = createSlice({
           notifications: [],
         };
       })
+      .addCase(deleteNotification.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+        };
+      })
+      .addCase(deleteNotification.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          response: "delete notification fulfilled",
+          newNotification: {},
+        };
+      })
+      .addCase(deleteNotification.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error,
+          response: "delete notification rejected",
+        };
+      })
       .addCase(logout.pending, (state) => {
         return {
           ...state,

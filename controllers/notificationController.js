@@ -32,6 +32,10 @@ exports.sendNotification = asyncHandler(async (req, res) => {
     chat: chatId,
   };
 
+  const notificationsExist = await Notification.find({ sender: userId });
+  for (notif of notificationsExist) {
+    await Notification.findByIdAndDelete(notif._id);
+  }
   try {
     var notification = await Notification.create(newNotification);
 

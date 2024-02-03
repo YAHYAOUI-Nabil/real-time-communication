@@ -66,8 +66,10 @@ export const sendNotifications = createAsyncThunk(
 
 export const deleteNotification = createAsyncThunk(
   "notifications/deleteNotifications",
-  async ({ axiosPrivate, id }) => {
-    const response = await axiosPrivate.delete(NOTIFICATION_URI + "/" + id);
+  async ({ axiosPrivate, notifId }) => {
+    const response = await axiosPrivate.delete(
+      NOTIFICATION_URI + "/" + notifId
+    );
     return response.data;
   }
 );

@@ -6,7 +6,7 @@ import avatar from "../../../data/avatar.png";
 
 const MyChats = () => {
   const { user } = useSelector((state) => state.auth);
-  const { chats } = useSelector((state) => state.chat);
+  const { chats, chat } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const [colorChat, setColorChat] = useState("second");
@@ -31,13 +31,13 @@ const MyChats = () => {
         {chats?.length > 0 ? (
           chats
             ?.filter((chat) => chat?.hasOwnProperty("latestMessage"))
-            .map((chat) => (
+            .map((chatItem) => (
               <div
-                key={chat._id}
+                key={chatItem._id}
                 onClick={() => {
-                  startMessage(chat._id);
+                  startMessage(chatItem._id);
                   setColorChat(
-                    chat?.users
+                    chatItem?.users
                       .map((user) => {
                         return user.fullname;
                       })
@@ -58,14 +58,14 @@ const MyChats = () => {
                 <div>
                   <img
                     src={avatar}
-                    alt={chat?.latestMessage.sender?.fullname}
+                    alt={chatItem?.latestMessage.sender?.fullname}
                     className="h-12 w-12 rounded-full"
                   />
                 </div>
                 <div>
                   <p>
                     <b>
-                      {chat?.users
+                      {chatItem?.users
                         .map((user) => {
                           return user.fullname;
                         })
@@ -75,12 +75,12 @@ const MyChats = () => {
                   <p>
                     {" "}
                     <b>
-                      {chat?.latestMessage?.sender?.fullname ===
+                      {chatItem?.latestMessage?.sender?.fullname ===
                         user.fullname && " You: "}
                     </b>
-                    {chat?.latestMessage.content.length > 12
-                      ? chat?.latestMessage.content.substring(0, 12) + "..."
-                      : chat?.latestMessage.content}
+                    {chatItem?.latestMessage.content.length > 12
+                      ? chatItem?.latestMessage.content.substring(0, 12) + "..."
+                      : chatItem?.latestMessage.content}
                   </p>
                 </div>
               </div>

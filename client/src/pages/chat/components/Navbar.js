@@ -3,18 +3,35 @@ import { FaSearch } from "react-icons/fa";
 import { MdNotifications } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../api";
+import {
+  logout,
+  deleteNotification,
+  accessChat,
+  fetchNotifications,
+} from "../../../api";
 import avatar from "../../../data/avatar.png";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
   const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
+  const axiosPrivate = useAxiosPrivate();
   const [showBtn, setShowBtn] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+
   const logoutUser = () => {
     dispatch(logout());
   };
+
+  const displayNotification = ({ notifId, id }) => {
+    dispatch(deleteNotification({ axiosPrivate, notifId }));
+    dispatch(accessChat({ axiosPrivate, id }));
+    // dispatch(fetchNotifications(axiosPrivate));
+    setShowNotifications(false);
+  };
+
   return (
     <div className="h-12">
       <div className="flex flex-row justify-between items-center w-full h-12 px-4 bg-white border-2 border-green-200">
@@ -25,13 +42,63 @@ const Navbar = () => {
           IJA-NAHKIW
         </p>
         <div className="flex flex-row gap-3 items-center">
-          <div className="relative cursor-pointer">
+          <div className="relative">
             {notifications?.length > 0 && (
               <div className="absolute -top-2 -right-2 bg-red-600 h-5 w-5 rounded-full text-white text-xs font-semibold flex justify-center items-center">
                 <p>{notifications?.length}</p>
               </div>
             )}
-            <MdNotifications className="h-6 w-6 text-green-400" />
+            <MdNotifications
+              className="h-6 w-6 text-green-400 cursor-pointer"
+              onClick={() => setShowNotifications(!showNotifications)}
+            />
+            <div
+              className={`absolute right-0 ${
+                showNotifications ? "flex flex-col" : "hidden"
+              } gap-2 bg-gray-200 p-2 w-80 rounded-md`}
+            >
+              {notifications?.length > 0 ? (
+                <>
+                  {notifications?.map((notification) => (
+                    <div
+                      className="flex items-center gap-2 p-1 bg-white rounded-md cursor-pointer"
+                      key={notification._id}
+                      onClick={() =>
+                        displayNotification({
+                          notifId: notification._id,
+                          id: notification.chat._id,
+                        })
+                      }
+                    >
+                      <div>
+                        <img
+                          src={avatar}
+                          alt={notification.sender.fullname}
+                          className="h-12 w-12 rounded-full"
+                        />
+                      </div>
+                      <div className="w-max">
+                        <p className="font-semibold">
+                          {notification.sender.fullname}
+                        </p>
+                        <p>
+                          {notification?.latestMessage.content.length > 30
+                            ? notification?.latestMessage.content.substring(
+                                0,
+                                30
+                              ) + "..."
+                            : notification?.latestMessage.content}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <div className="flex items-center p-1 bg-white rounded-md">
+                  <p>No notifications to show</p>
+                </div>
+              )}
+            </div>
           </div>
           <div
             className="flex gap-1 cursor-pointer"
@@ -44,10 +111,9 @@ const Navbar = () => {
             />
             <p className="font-semibold cursor-pointer">{user.fullname}</p>
           </div>
-
           <MdKeyboardArrowDown
             onClick={() => setShowBtn(!showBtn)}
-            className="h-6 w-6 text-green-400"
+            className="h-6 w-6 text-green-400 cursor-pointer"
           />
         </div>
       </div>
