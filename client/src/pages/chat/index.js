@@ -13,6 +13,7 @@ const Index = () => {
   const { newNotification } = useSelector((state) => state.notification);
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
+
   useEffect(() => {
     socket = io(process.env.REACT_APP_API_URL);
     socket.emit("setup", user);

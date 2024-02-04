@@ -28,7 +28,6 @@ const Navbar = () => {
   const displayNotification = ({ notifId, id }) => {
     dispatch(deleteNotification({ axiosPrivate, notifId }));
     dispatch(accessChat({ axiosPrivate, id }));
-    // dispatch(fetchNotifications(axiosPrivate));
     setShowNotifications(false);
   };
 
@@ -82,12 +81,12 @@ const Navbar = () => {
                           {notification.sender.fullname}
                         </p>
                         <p>
-                          {notification?.latestMessage.content.length > 30
-                            ? notification?.latestMessage.content.substring(
+                          {notification?.latestMessage?.content?.length > 30
+                            ? notification?.latestMessage?.content.substring(
                                 0,
                                 30
                               ) + "..."
-                            : notification?.latestMessage.content}
+                            : notification?.latestMessage?.content}
                         </p>
                       </div>
                     </div>
