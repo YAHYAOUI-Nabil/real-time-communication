@@ -17,3 +17,8 @@
 20240203	18:25:55	d0dab48f-2b8e-4d21-8f42-1be1c6141d03	Error: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Notification"
 20240203	18:26:35	c08b19dc-5572-4681-b879-ffbe226bc2a4	Error: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Notification"
 20240203	18:27:38	87548f04-323b-4eb9-8860-888f07c0bdde	Error: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Notification"
+20240204	17:26:22	1d817209-b804-4b6f-b899-343c2e96f3ac	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+20240204	17:26:27	e4da1958-6876-4dc9-a0be-1f0592b40f03	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+20240204	17:26:37	a4511320-b52a-4111-8df2-af5e0a5f2f52	MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+20240204	17:26:47	d57e4ec0-f841-44bd-b7f1-a99391648973	Error: Cast to ObjectId failed for value "undefined" (type string) at path "chat" for model "Message"
+20240204	17:26:51	75a7bb58-0305-4ea6-ac56-439c56346032	Error: Cast to ObjectId failed for value "undefined" (type string) at path "chat" for model "Message"

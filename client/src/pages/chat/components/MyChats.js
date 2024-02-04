@@ -9,7 +9,6 @@ const MyChats = () => {
   const { chats, chat } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
-  const [colorChat, setColorChat] = useState("second");
 
   const startMessage = (id) => {
     dispatch(accessChat({ axiosPrivate, id }));
@@ -36,17 +35,14 @@ const MyChats = () => {
                 key={chatItem._id}
                 onClick={() => {
                   startMessage(chatItem._id);
-                  setColorChat(
-                    chatItem?.users
-                      .map((user) => {
-                        return user.fullname;
-                      })
-                      .find((name) => name !== user.fullname)
-                  );
                 }}
                 className={`flex flex-row gap-2 p-2 rounded-md cursor-pointer ${
-                  colorChat ===
                   chat?.users
+                    .map((user) => {
+                      return user.fullname;
+                    })
+                    .find((name) => name !== user.fullname) ===
+                  chatItem?.users
                     .map((user) => {
                       return user.fullname;
                     })
