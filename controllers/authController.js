@@ -22,7 +22,7 @@ exports.login = asyncHandler(async (req, res, next) => {
       id: req.user._id,
     },
     process.env.REFRESH_TOKEN_SECRET_KEY,
-    { expiresIn: "7d" }
+    { expiresIn: "1d" }
   );
 
   // Changed to let keyword
@@ -133,7 +133,7 @@ exports.refresh = asyncHandler(async (req, res) => {
           id: foundUser._id,
         },
         process.env.REFRESH_TOKEN_SECRET_KEY,
-        { expiresIn: "7d" }
+        { expiresIn: "1d" }
       );
       // Saving refreshToken with current user
       foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];

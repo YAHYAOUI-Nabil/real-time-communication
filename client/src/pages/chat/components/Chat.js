@@ -57,7 +57,7 @@ const Chat = () => {
   }, [chat, message]);
 
   useEffect(() => {
-    if (message) {
+    if (message?.hasOwnProperty("content")) {
       socket.emit("new message", message);
       dispatch(fetchChats(axiosPrivate));
     }
