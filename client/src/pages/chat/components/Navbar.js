@@ -1,16 +1,11 @@
 import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
 import { MdNotifications } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  logout,
-  deleteNotification,
-  accessChat,
-  fetchNotifications,
-} from "../../../api";
+import { logout, deleteNotification, accessChat } from "../../../api";
 import avatar from "../../../data/avatar.png";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import Search from "./Search";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
@@ -34,9 +29,7 @@ const Navbar = () => {
   return (
     <div className="h-12">
       <div className="flex flex-row justify-between items-center w-full h-12 px-4 bg-white border-2 border-green-200">
-        <div>
-          <FaSearch />
-        </div>
+        <Search />
         <p className="text-center text-xl uppercase font-bold text-green-400">
           IJA-NAHKIW
         </p>

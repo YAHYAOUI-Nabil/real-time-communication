@@ -10611,3 +10611,11 @@
 20240204	17:30:34	e10e2f9f-df97-487d-be60-34ab0821e2b2	OPTIONS	http://localhost:3000	/message/65bfb6654c58040db8feba78
 20240204	17:30:34	36d82bdc-010f-4673-9f18-f4adddfffa6e	GET	http://localhost:3000	/message/65bfb6654c58040db8feba78
 20240204	17:30:40	7a37ea2b-ba64-47d6-acfa-c156987f3b85	POST	http://localhost:3000	/auth/logout
+20240204	18:42:55	29af28dd-e9f7-4e3b-853d-e24db056543c	OPTIONS	http://localhost:3000	/auth/login
+20240204	18:42:55	70e25f49-2efe-4d67-b01e-4628c77add0d	POST	http://localhost:3000	/auth/login
+20240204	18:42:58	c47a3af1-faf3-4561-8bb5-68207b327f7f	OPTIONS	http://localhost:3000	/user
+20240204	18:42:58	2dd79e59-c5ab-4b32-bddf-0644c0c2798e	OPTIONS	http://localhost:3000	/chat
+20240204	18:42:58	b3a6e6d4-3fe9-48e1-a494-53948d3bcdb3	OPTIONS	http://localhost:3000	/notification
+20240204	18:42:58	663a13e5-e8d5-4dff-b6ea-c5ca4ce17572	GET	http://localhost:3000	/user
+20240204	18:42:58	72a49c5f-9c83-42b4-a90f-7d011970c04c	GET	http://localhost:3000	/chat
+20240204	18:42:58	dd0642aa-ed54-4205-8c4b-9e1bf6bba7be	GET	http://localhost:3000	/notification
