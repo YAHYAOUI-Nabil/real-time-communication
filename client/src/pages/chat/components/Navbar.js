@@ -30,9 +30,7 @@ const Navbar = () => {
     <div className="h-12">
       <div className="flex flex-row justify-between items-center w-full h-12 px-4 bg-white border-2 border-green-200">
         <Search />
-        <p className="text-center text-xl uppercase font-bold text-green-400">
-          IJA-NAHKIW
-        </p>
+        <p className="text-center text-xl font-bold text-green-400">WhatsApp</p>
         <div className="flex flex-row gap-3 items-center">
           <div className="relative">
             {notifications?.length > 0 && (
