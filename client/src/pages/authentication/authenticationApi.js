@@ -42,8 +42,20 @@ export const validateUser = createAsyncThunk(
 
 export const fetchUsers = createAsyncThunk(
   "users/fetchUsers",
-  async (axiosPrivate) => {
-    const response = await axiosPrivate.get(FETCH_USERS_URI);
+  async ({ axiosPrivate, search }) => {
+    const response = await axiosPrivate.get(
+      FETCH_USERS_URI + `?search=${search}`
+    );
+    return response.data;
+  }
+);
+
+export const addFriend = createAsyncThunk(
+  "user/addFriend",
+  async ({ axiosPrivate, id }) => {
+    const response = await axiosPrivate.put(
+      FETCH_USERS_URI + "/add-user/" + id
+    );
     return response.data;
   }
 );

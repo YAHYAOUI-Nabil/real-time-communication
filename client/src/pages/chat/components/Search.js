@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { useDispatch } from "react-redux";
+import { fetchUsers } from "../../../api";
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchInput, setShowSearchInput] = useState(false);
-
+  const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    // props.getBlogs(language, page, sort, searchQuery);
+    dispatch(fetchUsers({ axiosPrivate, search: searchQuery }));
   }, [searchQuery]);
 
   const handleSearchQuery = (e) => {

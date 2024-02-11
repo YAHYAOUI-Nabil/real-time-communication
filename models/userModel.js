@@ -24,6 +24,12 @@ const userSchema = new Schema({
     type: String,
   },
   refreshToken: [String],
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: "email" });

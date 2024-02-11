@@ -67,6 +67,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     accessToken,
     fullname: req.user.fullname,
     email: req.user.email,
+    id: req.user._id,
   });
 });
 
@@ -151,6 +152,7 @@ exports.refresh = asyncHandler(async (req, res) => {
         accessToken,
         fullname: foundUser.fullname,
         email: foundUser.email,
+        id: foundUser._id,
       });
     }
   );

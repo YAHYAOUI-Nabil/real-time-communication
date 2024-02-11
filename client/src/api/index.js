@@ -4,6 +4,7 @@ export {
   signup,
   validateUser,
   fetchUsers,
+  addFriend,
 } from "../pages/authentication/authenticationApi";
 export {
   fetchMessages,

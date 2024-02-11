@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, startChat, fetchChats } from "../../../api";
+import { fetchUsers, startChat, fetchChats, addFriend } from "../../../api";
 import avatar from "../../../data/avatar.png";
 
 const FriendsList = () => {
@@ -15,8 +15,12 @@ const FriendsList = () => {
     dispatch(fetchChats(axiosPrivate));
   };
 
+  const addToFriendList = (id) => {
+    dispatch(addFriend({ axiosPrivate, id }));
+  };
+
   useEffect(() => {
-    dispatch(fetchUsers(axiosPrivate));
+    dispatch(fetchUsers({ axiosPrivate, search: "" }));
   }, []);
 
   return (
@@ -25,27 +29,38 @@ const FriendsList = () => {
         <p className="text-xl font-medium">My Friends</p>
       </div>
       <div className="flex flex-col gap-2 p-2 overflow-auto overflow-x-hidden scrollbar-hide">
-        {users?.length > 0 ? (
+        {users?.filter((item) => item.email !== user.email)?.length > 0 ? (
           users
             ?.filter((item) => item.email !== user.email)
             .map((friend) => (
               <div
                 key={friend._id}
-                onClick={() => newChat({ userId: friend?._id })}
-                className="flex flex-row items-center gap-2 p-2 bg-gray-200 rounded-md cursor-pointer"
+                className="flex flex-row items-center justify-between gap-2 p-2 bg-gray-200 rounded-md"
               >
-                <div>
-                  <img
-                    src={avatar}
-                    alt={friend?.fullname}
-                    className="h-12 w-12 rounded-full"
-                  />
+                <div
+                  className="flex flex-row items-center gap-2 cursor-pointer"
+                  onClick={() => newChat({ userId: friend?._id })}
+                >
+                  <div>
+                    <img
+                      src={avatar}
+                      alt={friend?.fullname}
+                      className="h-12 w-12 rounded-full"
+                    />
+                  </div>
+                  <p className="text-lg font-semibold">{friend.fullname}</p>
                 </div>
-                <p className="text-lg font-semibold">{friend.fullname}</p>
+                {!friend.friends.includes(user.id) && (
+                  <div className="p-2 rounded-md bg-green-400 text-white font-semibold">
+                    <button onClick={() => addToFriendList(friend?._id)}>
+                      add
+                    </button>
+                  </div>
+                )}
               </div>
             ))
         ) : (
-          <p>no chats to show</p>
+          <p>no friends to show</p>
         )}
       </div>
     </div>

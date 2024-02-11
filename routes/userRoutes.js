@@ -12,19 +12,19 @@ router.put(
   checkUserValidity.checkUserIsNotValid,
   userController.validateUser
 );
-router.get(
-  "/",
-  // rateLimiter,
-  // checkUserValidity.checkUserIsValid,
-  authenticate.verifyUser,
-  userController.getUsers
-);
+router.get("/", authenticate.verifyUser, userController.getUsers);
 router.put(
   "/edit-account",
   rateLimiter,
   checkUserValidity.checkUserIsValid,
   authenticate.verifyUser,
   userController.editUser
+);
+router.put(
+  "/add-user/:id",
+  rateLimiter,
+  authenticate.verifyUser,
+  userController.addUser
 );
 router.delete(
   "/delete-account",

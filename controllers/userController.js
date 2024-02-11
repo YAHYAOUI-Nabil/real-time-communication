@@ -37,14 +37,15 @@ exports.register = asyncHandler(async (req, res, next) => {
 });
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
-  const keyword = req.query.search
-    ? {
-        $or: [
-          { fullname: { $regex: req.query.search, $options: "i" } },
-          { email: { $regex: req.query.search, $options: "i" } },
-        ],
-      }
-    : {};
+  const keyword =
+    req.query.search.length > 0
+      ? {
+          $or: [
+            { fullname: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : { friends: { $elemMatch: { $eq: req.user._id } } };
   User.find(keyword)
     .then((users) => {
       if (users) {
@@ -89,6 +90,41 @@ exports.editUser = asyncHandler(async (req, res, next) => {
       res.setHeader("Content-Type", "application/json");
       res.json(err);
     });
+});
+
+exports.addUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const friendsList = req.user?.friends;
+  if (friendsList.includes(id)) {
+    res.statusCode = 201;
+    res.setHeader("Content-Type", "application/json");
+    res.json({ message: " you are already friends" });
+  }
+  try {
+    const update1 = {
+      friends: [...friendsList, id],
+    };
+    const updateFirstUser = await User.findByIdAndUpdate(
+      req.user._id,
+      update1,
+      {
+        new: true,
+      }
+    ).exec();
+
+    const secondUser = await User.findById(id).exec();
+    const friendsListSecondUser = secondUser?.friends;
+    const update2 = {
+      friends: [...friendsListSecondUser, req.user._id],
+    };
+    const updateSecondUser = await User.findByIdAndUpdate(id, update2, {
+      new: true,
+    }).exec();
+
+    res.json({ status: "User added successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
 });
 
 exports.validateUser = asyncHandler(async (req, res, next) => {
