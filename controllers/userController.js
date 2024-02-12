@@ -242,3 +242,31 @@ exports.deleteAccount = asyncHandler(async (req, res, next) => {
       res.json(err);
     });
 });
+
+exports.removeFriend = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user1 = await User.findById(req.user._id);
+    const user2 = await User.findById(id);
+    const friendListUser1 =
+      user1?.friends && user1.friends.filter((friendId) => friendId != id);
+    const friendListUser2 =
+      user2?.friends &&
+      user2.friends.filter((friendId) => friendId != req.user._id.toString());
+    const update1 = {
+      friends: friendListUser1,
+    };
+    const update2 = {
+      friends: friendListUser2,
+    };
+    const updateUser1 = await User.findByIdAndUpdate(req.user._id, update1, {
+      new: true,
+    }).exec();
+    const updateUser2 = await User.findByIdAndUpdate(id, update2, {
+      new: true,
+    }).exec();
+    res.json({ message: "User removed successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});

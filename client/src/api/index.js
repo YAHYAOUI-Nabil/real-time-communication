@@ -5,6 +5,7 @@ export {
   validateUser,
   fetchUsers,
   addFriend,
+  removeFriend,
 } from "../pages/authentication/authenticationApi";
 export {
   fetchMessages,

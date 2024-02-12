@@ -59,3 +59,12 @@ export const addFriend = createAsyncThunk(
     return response.data;
   }
 );
+export const removeFriend = createAsyncThunk(
+  "user/addFriend",
+  async ({ axiosPrivate, id }) => {
+    const response = await axiosPrivate.delete(
+      FETCH_USERS_URI + "/remove-friend/" + id
+    );
+    return response.data;
+  }
+);

@@ -33,5 +33,11 @@ router.delete(
   authenticate.verifyUser,
   userController.deleteAccount
 );
+router.delete(
+  "/remove-friend/:id",
+  rateLimiter,
+  authenticate.verifyUser,
+  userController.removeFriend
+);
 
 module.exports = router;

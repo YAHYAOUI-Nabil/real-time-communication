@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, startChat, fetchChats, addFriend } from "../../../api";
+import {
+  fetchUsers,
+  startChat,
+  fetchChats,
+  addFriend,
+  removeFriend,
+} from "../../../api";
 import avatar from "../../../data/avatar.png";
 
 const FriendsList = () => {
@@ -13,6 +19,10 @@ const FriendsList = () => {
   const newChat = (data) => {
     dispatch(startChat({ axiosPrivate, data }));
     dispatch(fetchChats(axiosPrivate));
+  };
+
+  const removeFromFriendList = (id) => {
+    dispatch(removeFriend({ axiosPrivate, id }));
   };
 
   const addToFriendList = (id) => {
@@ -50,10 +60,16 @@ const FriendsList = () => {
                   </div>
                   <p className="text-lg font-semibold">{friend.fullname}</p>
                 </div>
-                {!friend.friends.includes(user.id) && (
+                {!friend.friends.includes(user.id) ? (
                   <div className="p-2 rounded-md bg-green-400 text-white font-semibold">
                     <button onClick={() => addToFriendList(friend?._id)}>
                       add
+                    </button>
+                  </div>
+                ) : (
+                  <div className="p-2 rounded-md bg-red-400 text-white font-semibold">
+                    <button onClick={() => removeFromFriendList(friend?._id)}>
+                      remove
                     </button>
                   </div>
                 )}
