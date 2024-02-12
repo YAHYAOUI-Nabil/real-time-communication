@@ -118,7 +118,7 @@ const Chat = () => {
   }, [messages]);
 
   return (
-    <div className="p-2 lg:w-3/4 md:w-2/3 bg-white md:h-[532px] h-screen rounded-md border-2 border-green-200">
+    <div className="p-2 lg:w-3/4 md:w-2/3 bg-white md:h-[532px] h-[98vh] rounded-md border-2 border-green-200">
       {chat ? (
         <div
           className={`flex flex-col ${
@@ -127,7 +127,7 @@ const Chat = () => {
         >
           <div
             className={`${
-              istyping ? "h-[424px]" : "h-[464px]"
+              istyping ? "md:h-[424px] h-[87vh] " : "md:h-[464px] h-[91vh] "
             } flex flex-col justify-between gap-2`}
           >
             <p className="text-lg">
@@ -175,7 +175,7 @@ const Chat = () => {
 
           <div
             className={`${
-              istyping ? "h-[66px]" : "h-[36px]"
+              istyping ? "md:h-[66px] h-[8vh]" : "md:h-[36px] h-[6vh]"
             } flex flex-col justify-between w-full`}
           >
             {istyping ? (

@@ -11,7 +11,7 @@ import {
 import avatar from "../../../data/avatar.png";
 
 const FriendsList = () => {
-  const { users } = useSelector((state) => state.users);
+  const { users, friends } = useSelector((state) => state.users);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
@@ -31,10 +31,10 @@ const FriendsList = () => {
 
   useEffect(() => {
     dispatch(fetchUsers({ axiosPrivate, search: "" }));
-  }, []);
+  }, [friends]);
 
   return (
-    <div className="flex flex-col gap-2 bg-white h-[262px] rounded-md border-2 border-green-200">
+    <div className="flex flex-col gap-2 bg-white sm:h-[262px] h-[46vh] rounded-md border-2 border-green-200">
       <div className="flex flex-row items-center p-2 justify-between">
         <p className="text-xl font-medium">My Friends</p>
       </div>

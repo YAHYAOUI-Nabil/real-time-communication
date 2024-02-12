@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUsers, logout } from "../../api";
+import { fetchUsers, logout, addFriend, removeFriend } from "../../api";
 
 const initialState = {
   loading: false,
   error: {},
   users: [],
+  friends: [],
   response: "",
 };
 
@@ -35,6 +36,52 @@ export const userSlice = createSlice({
           error: action.error,
           response: "fetch users rejected",
           users: [],
+        };
+      })
+      .addCase(addFriend.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+        };
+      })
+      .addCase(addFriend.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          response: "add friend fulfilled",
+          friends: action.payload,
+        };
+      })
+      .addCase(addFriend.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error,
+          response: "add friend rejected",
+          friends: [],
+        };
+      })
+      .addCase(removeFriend.pending, (state) => {
+        return {
+          ...state,
+          loading: true,
+        };
+      })
+      .addCase(removeFriend.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          response: "remove friend fulfilled",
+          friends: action.payload,
+        };
+      })
+      .addCase(removeFriend.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: action.error,
+          response: "remove friend rejected",
+          friends: [],
         };
       })
       .addCase(logout.pending, (state) => {

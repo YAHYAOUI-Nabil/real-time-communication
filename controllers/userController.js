@@ -121,7 +121,7 @@ exports.addUser = asyncHandler(async (req, res, next) => {
       new: true,
     }).exec();
 
-    res.json({ status: "User added successfully" });
+    res.json({ friends: updateFirstUser.friends });
   } catch (error) {
     res.status(500).json({ error: error });
   }
@@ -265,7 +265,7 @@ exports.removeFriend = asyncHandler(async (req, res, next) => {
     const updateUser2 = await User.findByIdAndUpdate(id, update2, {
       new: true,
     }).exec();
-    res.json({ message: "User removed successfully" });
+    res.json({ friends: updateUser1.friends });
   } catch (error) {
     res.status(500).json({ error: error });
   }

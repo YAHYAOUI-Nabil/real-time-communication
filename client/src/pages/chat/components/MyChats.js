@@ -19,7 +19,7 @@ const MyChats = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 bg-white h-[262px] rounded-md border-2 border-green-200">
+    <div className="flex flex-col gap-2 bg-white sm:h-[262px] h-[46vh] rounded-md border-2 border-green-200">
       <div className="flex flex-row items-center p-2 justify-between">
         <p className="text-xl font-medium">My chats</p>
         <button className="p-2 text-sm font-medium border-2 border-green-200 rounded-md">
