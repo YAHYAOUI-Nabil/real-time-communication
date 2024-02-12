@@ -5,9 +5,8 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import { useDispatch } from "react-redux";
 import { fetchUsers } from "../../../api";
 
-const Search = () => {
+const Search = ({ showSearchInput, setShowSearchInput }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [showSearchInput, setShowSearchInput] = useState(false);
   const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
 

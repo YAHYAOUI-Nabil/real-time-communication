@@ -26,7 +26,7 @@ const Index = () => {
   return (
     <div className="flex flex-col h-screen w-full">
       <Navbar />
-      <div className="flex flex-row gap-2 p-2 grow">
+      <div className="flex lg:flex-row md:flex-row flex-col gap-2 p-2 grow">
         <Sidebar />
         <Chat />
       </div>

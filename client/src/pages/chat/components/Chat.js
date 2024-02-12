@@ -118,28 +118,28 @@ const Chat = () => {
   }, [messages]);
 
   return (
-    <div className="p-2 w-3/4 bg-white h-[532px] rounded-md border-2 border-green-200">
+    <div className="p-2 lg:w-3/4 md:w-2/3 bg-white md:h-[532px] h-screen rounded-md border-2 border-green-200">
       {chat ? (
         <div
           className={`flex flex-col ${
             messages ? "justify-between" : "justify-end"
           } gap-2`}
         >
-          {messages && (
-            <div
-              className={`${
-                istyping ? "h-[424px]" : "h-[464px]"
-              } flex flex-col justify-between gap-2`}
-            >
-              <p className="text-lg">
-                <b>
-                  {messages[0]?.chat?.users
-                    .map((user) => {
-                      return user.fullname;
-                    })
-                    .find((name) => name !== user.fullname)}
-                </b>
-              </p>
+          <div
+            className={`${
+              istyping ? "h-[424px]" : "h-[464px]"
+            } flex flex-col justify-between gap-2`}
+          >
+            <p className="text-lg">
+              <b>
+                {chat?.users
+                  .map((user) => {
+                    return user.fullname;
+                  })
+                  .find((name) => name !== user.fullname)}
+              </b>
+            </p>
+            {messages && (
               <div className="flex flex-col gap-4 overflow-auto scrollbar-hide">
                 <div className="flex flex-col gap-2">
                   {messages?.map((message) =>
@@ -170,8 +170,9 @@ const Chat = () => {
                   <div ref={messagesEndRef} />
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+
           <div
             className={`${
               istyping ? "h-[66px]" : "h-[36px]"

@@ -15,6 +15,7 @@ const Navbar = () => {
   const [showBtn, setShowBtn] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showSearchInput, setShowSearchInput] = useState(false);
 
   const logoutUser = () => {
     dispatch(logout());
@@ -29,9 +30,22 @@ const Navbar = () => {
   return (
     <div className="h-12">
       <div className="flex flex-row justify-between items-center w-full h-12 px-4 bg-white border-2 border-green-200">
-        <Search />
-        <p className="text-center text-xl font-bold text-green-400">WhatsApp</p>
-        <div className="flex flex-row gap-3 items-center">
+        <Search
+          showSearchInput={showSearchInput}
+          setShowSearchInput={setShowSearchInput}
+        />
+        <p
+          className={`${
+            showSearchInput ? "sm:flex hidden" : "flex"
+          } text-center text-xl font-bold text-green-400`}
+        >
+          WhatsApp
+        </p>
+        <div
+          className={`${
+            showSearchInput ? "sm:flex hidden" : "flex"
+          } flex-row gap-3 items-center`}
+        >
           <div className="relative">
             {notifications?.length > 0 && (
               <div className="absolute -top-2 -right-2 bg-red-600 h-5 w-5 rounded-full text-white text-xs font-semibold flex justify-center items-center">
@@ -99,7 +113,9 @@ const Navbar = () => {
               alt={user.fullname}
               className="h-6 w-6 rounded-full"
             />
-            <p className="font-semibold cursor-pointer">{user.fullname}</p>
+            <p className="sm:flex hidden font-semibold cursor-pointer">
+              {user.fullname}
+            </p>
           </div>
           <MdKeyboardArrowDown
             onClick={() => setShowBtn(!showBtn)}
