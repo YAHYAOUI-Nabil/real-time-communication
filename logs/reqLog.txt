@@ -11253,3 +11253,4 @@
 20240212	10:15:34	72a886f1-29dd-4b55-8c10-adc14fe29f85	GET	http://localhost:3000	/user?search=s
 20240212	10:15:39	d5865652-9055-40c0-b0f2-798ad3f78b84	OPTIONS	http://localhost:3000	/user?search=
 20240212	10:15:39	a6b360c8-2dc8-42b3-af4f-3d8b49afe253	GET	http://localhost:3000	/user?search=
+20240212	10:17:44	11cb3413-26dd-45d2-a919-9e7a9d7aa66f	POST	http://localhost:3000	/auth/logout
