@@ -127,7 +127,7 @@ const Chat = () => {
         >
           <div
             className={`${
-              istyping ? "md:h-[424px] h-[87vh] " : "md:h-[464px] h-[91vh] "
+              istyping ? "md:h-[424px] h-[86vh] " : "md:h-[464px] h-[90vh] "
             } flex flex-col justify-between gap-2`}
           >
             <p className="text-lg">
