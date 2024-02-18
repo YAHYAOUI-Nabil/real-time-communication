@@ -60,7 +60,7 @@ const FriendsList = () => {
                   </div>
                   <p className="text-lg font-semibold">{friend.fullname}</p>
                 </div>
-                {!friend.friends.includes(user.id) ? (
+                {!friend?.friends?.includes(user.id) ? (
                   <div className="p-2 rounded-md bg-green-400 text-white font-semibold">
                     <button onClick={() => addToFriendList(friend?._id)}>
                       add
