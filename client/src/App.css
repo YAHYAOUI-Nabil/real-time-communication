@@ -1,7 +1,7 @@
 .App {
   min-height: 100vh;
   display: flex;
-  background-image: url("./background.jpeg");
+  background-image: url("./back-img.jpg");
   background-position: center;
   background-size: cover;
 }
@@ -9,7 +9,7 @@
   .App {
     min-height: 200vh;
     height: 200vh;
-    background-image: url("./background.jpeg");
+    background-image: url("./back-img.jpg");
     background-position: center;
     background-size: cover;
     background-repeat: repeat;
