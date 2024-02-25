@@ -5,13 +5,3 @@
   background-position: center;
   background-size: cover;
 }
-@media only screen and (max-width: 800px) {
-  .App {
-    min-height: 200vh;
-    height: 200vh;
-    background-image: url("./back-img.jpg");
-    background-position: center;
-    background-size: cover;
-    background-repeat: repeat;
-  }
-}

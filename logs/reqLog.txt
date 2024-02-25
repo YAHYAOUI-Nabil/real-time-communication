@@ -11714,3 +11714,17 @@
 20240212	13:46:34	ac4f24b9-b3c3-4d5d-b528-d0c070ff5659	DELETE	http://localhost:3000	/user/remove-friend/65b6733fbf1c2975fd00b983
 20240212	13:46:36	a557515f-3b1f-4372-8b8a-18805a579e78	OPTIONS	http://localhost:3000	/user?search=
 20240212	13:46:36	1485758c-65d4-4d46-b506-c96f769f01b5	GET	http://localhost:3000	/user?search=
+20240225	19:35:41	d52a099c-85e7-401b-a946-9dcc9958ac00	OPTIONS	http://localhost:3000	/auth/login
+20240225	19:35:41	5eae4854-a039-4de4-90ff-8cfb4fb34b28	POST	http://localhost:3000	/auth/login
+20240225	19:35:43	0dfd6a3e-4b7b-4005-8813-4cace5e75040	OPTIONS	http://localhost:3000	/user?search=
+20240225	19:35:43	090acf0b-3e0e-436b-92ca-8a5bdb5b8520	OPTIONS	http://localhost:3000	/user?search=
+20240225	19:35:43	cc0be273-d744-4330-80f2-8d739d02742e	OPTIONS	http://localhost:3000	/chat
+20240225	19:35:43	d9a32388-996e-4470-b04b-624fc46eaa09	OPTIONS	http://localhost:3000	/notification
+20240225	19:35:43	c58c7570-7179-403e-91ba-bd50e7ada703	GET	http://localhost:3000	/user?search=
+20240225	19:35:43	442a31f6-1eff-4974-80b7-3b19a294a03b	GET	http://localhost:3000	/chat
+20240225	19:35:43	6ceb46f8-0e08-4c84-8051-5574e995a6d4	GET	http://localhost:3000	/notification
+20240225	19:35:44	756c34e2-b8c1-452b-a14a-855c2b707344	GET	http://localhost:3000	/user?search=
+20240225	19:36:13	6cffacaf-4022-4952-815b-d2abfff6667b	OPTIONS	http://localhost:3000	/notification
+20240225	19:36:13	3d6ce203-ea9a-48a4-8da3-6885b12340e0	GET	http://localhost:3000	/notification
+20240225	19:36:44	97708da0-cefc-401e-aa07-2e0ab3896a1a	OPTIONS	http://localhost:3000	/notification
+20240225	19:36:44	a0f49d20-6ca4-42ff-878b-93cb63ad5b28	GET	http://localhost:3000	/notification

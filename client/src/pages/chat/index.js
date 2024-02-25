@@ -24,7 +24,7 @@ const Index = () => {
   }, [newNotification]);
 
   return (
-    <div className="flex flex-col h-screen w-full">
+    <div className="flex flex-col w-full">
       <Navbar />
       <div className="flex lg:flex-row md:flex-row flex-col gap-2 p-2 grow">
         <Sidebar />

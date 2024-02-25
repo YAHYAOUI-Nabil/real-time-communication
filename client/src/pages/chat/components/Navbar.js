@@ -39,7 +39,7 @@ const Navbar = () => {
             showSearchInput ? "sm:flex hidden" : "flex"
           } text-center text-xl font-bold text-green-400`}
         >
-          WhatsApp
+          WhatsApp Clone
         </p>
         <div
           className={`${
