@@ -59,7 +59,7 @@ const Navbar = () => {
             <div
               className={`absolute right-0 ${
                 showNotifications ? "flex flex-col" : "hidden"
-              } gap-2 bg-gray-200 p-2 w-80 rounded-md`}
+              } gap-2 bg-gray-200 p-2 md:w-80 w-64 rounded-md`}
             >
               {notifications?.length > 0 ? (
                 <>
